@@ -1,15 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Inter } from "next/font/google";
-import { Anton } from "next/font/google";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const anton = Anton({ subsets: ["latin"], weight: ["400"] });
-const inter = Inter({ subsets: ["latin"], weight: ["200", "400", "700"] });
 
 // Keywords to highlight
 const HIGHLIGHT_WORDS = [
@@ -79,21 +74,21 @@ export default function Hero2() {
                 scrollTrigger: {
                     trigger: textRef.current,
                     start: "top 80%",
-                    toggleActions: "play none none reverse",
+                    toggleActions: "play none none none",
                 },
             }
         );
     }, []);
 
     return (
-        <div className="w-screen max-w-8xl p-5 bg-noise flex justify-center">
+        <div className="w-screen min-h-screen flex justify-center items-center max-w-8xl p-5 bg-white dark:bg-black relative z-10">
 
             <h2
                 ref={textRef}
-                className={`${inter.className} relative text-4xl font-light text-white text-center max-w-5xl tracking-wide leading-[3rem]`}
+                className={` relative text-4xl font-thin dark:text-white text-black text-center max-w-5xl tracking-wide leading-12`}
             >
-                <QuoteIconBold className="w-50 h-50 p-15 text-white absolute -top-20 -left-35 rounded-full border border-dashed border-white/20" />
-                <QuoteIconBold className="w-50 h-50 p-15 text-white absolute -top-20 -right-35 -rotate-y-180 rounded-full border border-dashed border-white/20" />
+                <QuoteIconBold className="w-50 h-50 p-15 dark:text-white/30 text-black/30 absolute -top-20 -left-35 rounded-full border border-dashed dark:border-white/20 border-black/20" />
+                <QuoteIconBold className="w-50 h-50 p-15 dark:text-white/30 text-black/30 absolute -top-20 -right-35 -rotate-y-180 rounded-full border border-dashed dark:border-white/20 border-black/20 " />
                 {[
                     "The internet moves fast. Brands must move smarter.",
                     "We shape motion, color, and code into clear stories.",
@@ -104,7 +99,7 @@ export default function Hero2() {
                     "When creativity aligns with strategy, growth follows.",
                     "That is where we work.",
                 ].map((line, i) => (
-                    <span key={i} className="line block overflow-hidden">
+                    <span key={i} className="line block overflow-hidden font-light">
                         <span className="block">{highlightText(line)}</span>
                     </span>
                 ))}

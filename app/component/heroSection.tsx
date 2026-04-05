@@ -1,175 +1,8 @@
-// "use client";
-
-// import { useEffect, useRef } from "react";
-// import gsap from "gsap";
-// import { Anton, Noto_Sans_Devanagari , } from "next/font/google";
-// import { Khand } from "next/font/google";
-// import HeroLoopBoxes from "./heroUI";
-
-// const anton = Anton({ subsets: ["latin"], weight: ["400"] });
-// const hindiFont = Noto_Sans_Devanagari({
-//   subsets: ["devanagari"],
-//   weight: ["700"],
-// });
-// const khand = Khand({ subsets: ["devanagari"], weight: ["400", "700"] });
-
-// export default function HeroSection() {
-//   const subtitleRef = useRef<HTMLHeadingElement>(null);
-
-//   useEffect(() => {
-//     const ctx = gsap.context(() => {
-//       const lines = gsap.utils.toArray(".line");
-
-//       // -------------------------
-//       // MAIN HERO TEXT REVEAL
-//       // -------------------------
-//       const tl = gsap.timeline({
-//         defaults: { ease: "power2.out" },
-//         delay: 0.8,
-//       });
-
-//       tl.from(lines, {
-//         yPercent: 120,
-//         opacity: 0,
-//         duration: 1.5,
-//         stagger: 0.15,
-//       }).from(
-//         subtitleRef.current,
-//         {
-//           opacity: 0,
-//           y: 30,
-//           duration: 1,
-//         },
-//         "-=0.4"
-//       );
-
-//       // -------------------------
-//       // MEDIA ⇄ मीडिया INITIAL STATE
-//       // -------------------------
-//       gsap.set(".media-en", { y: "0%" });
-//       gsap.set(".media-hi", { y: "100%" });
-
-//       // -------------------------
-//       // MEDIA ⇄ मीडिया SCROLL LOOP
-//       // -------------------------
-//       const mediaTl = gsap.timeline({
-//         repeat: -1,
-//         delay: 2,
-//       });
-
-//       mediaTl
-//         // English out, Hindi in
-//         .to(".media-en", {
-//           y: "-100%",
-//           duration: 0.6,
-//           ease: "power2.inOut",
-//         })
-//         .to(
-//           ".media-hi",
-//           {
-//             y: "0%",
-//             duration: 0.6,
-//             ease: "power2.inOut",
-//           },
-//           "<"
-//         )
-
-//         // Pause on Hindi
-//         .to({}, { duration: 2 })
-
-//         // Hindi out, English in
-//         .to(".media-hi", {
-//           y: "-100%",
-//           duration: 0.6,
-//           ease: "power2.inOut",
-//         })
-//         .set(".media-en", { y: "100%" })
-//         .to(
-//           ".media-en",
-//           {
-//             y: "0%",
-//             duration: 0.6,
-//             ease: "power2.inOut",
-//           },
-//           "<"
-//         )
-
-//         // Pause on English
-//         .to({}, { duration: 2 });
-//     });
-
-//     return () => ctx.revert();
-//   }, []);
-
-//   return (
-//     <div
-//       id="hero"
-//       data-nav="dark"
-//       className={`${anton.className} relative pointer-events-none text-white flex flex-col justify-center items-center min-h-screen w-screen bg-noise pb-10`}
-//     >
-//       <div className="absolute md:top-55 top-50 flex flex-col justify-center items-center">
-//         {/* TITLE */}
-//         <h1 className="md:text-8xl text-[52px] text-center md:leading-none leading-13 overflow-hidden">
-//           <span className="line flex justify-center items-center gap-4">
-//             <span>Social</span>
-
-//             {/* SCROLL SLOT */}
-//             <span className="relative inline-flex items-center justify-center overflow-hidden h-[1em]">
-//               {/* WIDTH SIZER (invisible) */}
-//               <span className="opacity-0 pointer-events-none select-none">
-//                 Media
-//               </span>
-
-//               {/* ENGLISH */}
-//               <span
-//                 className="absolute inset-0 flex items-center justify-center media-en text-red-500 leading-none will-change-transform"
-//                 aria-hidden="false"
-//               >
-//                 Media
-//               </span>
-
-//               {/* HINDI */}
-//               <span
-//                 className={`absolute top-6 inset-0 flex items-center justify-center media-hi text-red-500 leading-none will-change-transform ${khand.className} font-bold`}
-//                 aria-hidden="true"
-//               >
-//                 मीडिया
-//               </span>
-//             </span>
-
-//           </span>
-
-//           <span className="block line">Content Agency</span>
-//         </h1>
-
-//         {/* SUBTITLE */}
-//         <h2
-//           ref={subtitleRef}
-//           className="md:text-xl md:w-auto w-[95%] text-sm text-center mt-2 tracking-wide overflow-hidden"
-//         >
-//           <span className="block">
-//             We create engaging content and sites for your social media platforms.
-//           </span>
-//         </h2>
-//       </div>
-
-//       <div className="md:mt-85 mt-50 w-full hide-scrollbar">
-//         <HeroLoopBoxes />
-//       </div>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Lora, Anton, Bebas_Neue } from "next/font/google";
-import HeroLoopBoxes from "./heroUI";
-
-const lora = Lora({ subsets: ["latin"], weight: ["400", "700"] });
-const anton = Anton({ subsets: ["latin"], weight: ["400"] });
-const bebas = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
+import MicroGraphicBadge from "./micrographic";
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -226,31 +59,28 @@ export default function HeroSection() {
   return (
     <div
       ref={heroRef}
-      id="hero"
-      data-nav="dark"
-      className={`${anton.className} relative pointer-events-none text-white flex flex-col gap-5 justify-center items-center min-h-screen w-screen bg-noise pb-10`}
+      className={` font-extralight relative pointer-events-none text-white flex flex-col gap-5 justify-center items-center h-screen w-screen dark:bg-black bg-white p-10 pb-0`}
     >
-      <div className="absolute md:top-55 top-50 flex flex-col justify-center items-center">
-        <h1 className="md:text-8xl text-[52px] text-center md:leading-none leading-13 overflow-hidden">
+      <div className="absolute z-10 top-16 right-10 h-[45%] w-[20%] bg-white/20 flex shadow-inner shadow-black sahdow-lg">
+        <img src="image.png" alt="" className=" object-center object-cover h-full w-full" />
+      </div>
+      <div className="absolute top-14 left-0 h-[1px] w-[80%] bg-gradient-to-l dark:from-black dark:to-white/50 from-white to-black/50"></div>
+      <div className="absolute top-0 left-7 h-[60%] w-[1px] bg-gradient-to-t dark:from-black dark:to-white/50 from-white to-black/50"></div>
+      <div className="absolute top-16 left-9 max-w-md text-black/50 dark:text-white/50 text-xs">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt at ad cupiditate corporis rem sapiente saepe? Doloribus ducimus distinctio velit est impedit voluptate ut, corrupti placeat dignissimos quod. Enim?
+      </div>
+      <div className="absolute -top-100 -right-50 h-[80%] w-[90%] rotate-45 rounded-4xl bg-black/3 dark:bg-white/2"></div>
+      <div className="absolute -top-120 -right-40 h-[80%] w-[90%] rotate-55 rounded-4xl bg-black/4 dark:bg-white/3"></div>
+      <div className="absolute -top-160 -right-10 h-[80%] w-[90%] rotate-70 rounded-4xl bg-black/3 dark:bg-white/2"></div>
+      <div className="w-full h-full flex items-end z-10 relative">
+        <h1 className="md:text-[10.5vw] text-[52px] dark:text-white text-black text-left md:leading-none leading-13 overflow-hidden uppercase">
           <span className="block line">
             Social <span className="text-red-500">Media</span>
           </span>
           <span className="block line">Content Agency</span>
         </h1>
-
-        <h2 className="md:text-xl md:w-auto w-[95%] text-sm text-center mt-2 tracking-wide overflow-hidden">
-          <span className="block subtitle-line">
-            We create engaging content and sites for your social media platforms.
-          </span>
-        </h2>
       </div>
 
-      <div
-        ref={boxesRef}
-        className="md:mt-75 mt-50 w-full hide-scrollbar will-change-transform"
-      >
-        <HeroLoopBoxes />
-      </div>
     </div>
   );
 }
