@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import MicroGraphicBadge from "./micrographic";
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
