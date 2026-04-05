@@ -1,72 +1,75 @@
 "use client";
 
-import { Dancing_Script, Lora, Anton } from "next/font/google";
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { Oswald } from "next/font/google";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X } from "lucide-react";
+import gsap from "gsap";
+import ThemeToggle from "../component/themetoggle";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import { TextPlugin } from "gsap/TextPlugin";
+import Link from "next/link";
 
-/* ================= FONTS ================= */
-const lora = Lora({ subsets: ["latin"], weight: ["400", "700"] });
-const anton = Anton({ subsets: ["latin"], weight: ["400"] });
-const dancingScript = Dancing_Script({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
+gsap.registerPlugin(ScrambleTextPlugin, TextPlugin);
+const oswald = Oswald({ subsets: ["latin"], weight: ["400", "700"] });
+const handleHover = (el: HTMLElement, text: string) => {
+  gsap.killTweensOf(el);
 
-/* ================= DATA ================= */
-const services = [
-  { title: "Video Editing", img: "/services/1.jpg" },
-  { title: "Graphic Design", img: "/services/2.jpg" },
-  { title: "Web Development", img: "/services/3.jpg" },
-];
+  gsap.to(el, {
+    duration: 0.8,
+    scrambleText: {
+      text,
+      chars: "upperCase",
+      speed: 0.1,
+    },
+    ease: "power1.out",
+  });
+};
 
-/* ========================================================= */
-/* ================= DESKTOP NAV (100% ORIGINAL LOGIC) ================= */
-/* ========================================================= */
-function DesktopNavbar() {
+const handleLeave = (el: HTMLElement, text: string) => {
+  gsap.killTweensOf(el);
+  el.innerText = text; // ✅ instant clean reset
+};
+
+
+export default function NewNavbar() {
+  const [dateTime, setDateTime] = useState("");
+  const [shortTime, setShortTime] = useState("");
+  const [open, setOpen] = useState(false);
   const navRef = useRef<HTMLDivElement | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const [activePreview, setActivePreview] =
-    useState<"services" | "projects" | "portfolio" | null>(null);
-  const [hoverService, setHoverService] = useState(0);
-  const [navTheme, setNavTheme] = useState<"light" | "dark">("light");
-
-  /* ---------- INTRO + THEME ---------- */
   useEffect(() => {
-    let gsapInstance: any;
-
-    import("gsap").then((mod) => {
-      gsapInstance = mod.gsap;
-      gsapInstance.from(navRef.current, {
-        opacity: 0,
-        duration: 5,
-        delay: 1,
-        ease: "power1.out",
-      });
-      gsapInstance.set(panelRef.current, { height: 0, opacity: 0 });
-    });
-
-    const sections = document.querySelectorAll<HTMLElement>("section[data-nav]");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setNavTheme(
-              entry.target.getAttribute("data-nav") === "dark"
-                ? "dark"
-                : "light"
-            );
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    sections.forEach((sec) => observer.observe(sec));
-    return () => observer.disconnect();
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      };
+      const time = new Intl.DateTimeFormat("en-IN", options).format(now);
+      setDateTime("NEW DELHI, INDIA | " + time);
+      setShortTime(time);
+    };
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
   }, []);
 
-  /* ---------- AUTO HIDE / SHOW ON SCROLL (RESTORED) ---------- */
+  useEffect(() => {
+    if (!menuRef.current) return;
+    if (open) {
+      gsap.to(menuRef.current, { x: 0, duration: 0.6, ease: "power3.out" });
+    } else {
+      gsap.to(menuRef.current, { x: "-100%", duration: 0.6, ease: "power3.inOut" });
+    }
+  }, [open]);
+
+  const navLinks = [
+    { label: "ABOUT", number: "01", href: "#about" },
+    { label: "PROJECTS", number: "02", href: "/#project" },
+    { label: "CONTACT", number: "03", href: "#contact" },
+  ];
+
   useEffect(() => {
     let lastScrollY = 0;
     let isHidden = false;
@@ -115,179 +118,109 @@ function DesktopNavbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* ---------- PANEL CONTROL ---------- */
-  const openPanel = () => {
-    import("gsap").then(({ gsap }) => {
-      gsap.to(panelRef.current, {
-        height: 370,
-        opacity: 1,
-        duration: 0.4,
-        ease: "power2.out",
-      });
-    });
-  };
-
-  const closePanel = () => {
-    import("gsap").then(({ gsap }) => {
-      gsap.to(panelRef.current, {
-        height: 0,
-        opacity: 0,
-        duration: 0.35,
-        ease: "power2.inOut",
-      });
-    });
-  };
-
-  const showPreview = (
-    type: "services" | "projects" | "portfolio"
-  ) => {
-    setActivePreview(type);
-    openPanel();
-  };
-
-  
-  return (
-    <div
-      ref={navRef}
-      className="
-        fixed top-8 left-1/2 -translate-x-1/2 z-50
-        rounded-3xl p-6 px-10
-        border border-white/40
-        bg-white/15 backdrop-blur-xl
-        shadow-[0_0_20px_rgba(183,189,223,0.20)]
-      "
-      onMouseLeave={closePanel}
-    >
-      {/* NAV CONTENT */}
-      <div
-        className={`relative flex items-center justify-between min-w-7xl text-[17px] ${
-          navTheme === "dark" ? "text-black/80" : "text-white"
-        }`}
-      >
-        <div className={`${anton.className} flex gap-10`}>
-          <div onMouseEnter={() => showPreview("services")}>Services</div>
-          <div onMouseEnter={() => showPreview("projects")}>Projects</div>
-        </div>
-
-        <div
-          className={`${dancingScript.className} absolute left-1/2 -translate-x-1/2 text-4xl`}
-        >
-          uplicity
-        </div>
-
-        <div
-          className={`${anton.className}`}
-          onMouseEnter={() => showPreview("portfolio")}
-        >
-          About Us
-        </div>
-      </div>
-
-      {/* PREVIEW PANEL */}
-      <div ref={panelRef} className="overflow-hidden">
-        {activePreview === "services" && (
-          <div className="grid grid-cols-2 gap-6 mt-5">
-            <div className="flex flex-col gap-4">
-              {services.map((s, i) => (
-                <div
-                  key={i}
-                  className={`${anton.className}`}
-                  style={{ opacity: hoverService === i ? 1 : 0.1 }}
-                  onMouseEnter={() => setHoverService(i)}
-                >
-                  <div className="text-5xl">{s.title}</div>
-                </div>
-              ))}
-            </div>
-            <div className="relative min-h-[350px] border">
-              <Image
-                src={services[hoverService].img}
-                alt="preview"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ========================================================= */
-/* ================= MOBILE NAV (SEPARATE) ================= */
-/* ========================================================= */
-function MobileNavbar() {
-  const panelRef = useRef<HTMLDivElement | null>(null);
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!panelRef.current) return;
-
-    import("gsap").then(({ gsap }) => {
-      open
-        ? gsap.fromTo(
-            panelRef.current,
-            { x: "100%" },
-            { x: "0%", duration: 0.5, ease: "power3.out" }
-          )
-        : gsap.to(panelRef.current, {
-            x: "100%",
-            duration: 0.45,
-            ease: "power3.inOut",
-          });
-    });
-  }, [open]);
-
-  return (
-    <div>
-      {/* TOP BAR */}
-      <div className="md:hidden fixed top-4 left-4 right-4 z-50 flex justify-between items-center px-5 py-4 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/15">
-        <div className={`${dancingScript.className} text-3xl text-white`}>
-          uplicity
-        </div>
-
-        <button
-          className="relative w-7 h-6 mr-3"
-          onClick={() => setOpen((p) => !p)}
-        >
-          <span className={`absolute h-[1px] w-full bg-white transition ${open ? "rotate-45 top-3.5" : "top-1"}`} />
-          <span className={`absolute h-[1px] w-full bg-white transition ${open ? "opacity-0" : "top-3.5"}`} />
-          <span className={`absolute h-[1px] w-full bg-white transition ${open ? "-rotate-45 top-3.5" : "top-6"}`} />
-        </button>
-      </div>
-
-      {/* SLIDE PANEL */}
-      <div
-        ref={panelRef}
-        className="md:hidden fixed top-5 right-0 h-screen w-screen bg-black/70 backdrop-blur-xl translate-x-full z-40"
-      >
-        <div className={`${anton.className} flex flex-col uppercase gap-8 p-10 pt-24 text-white text-4xl tracking-wide`}>
-          <div className="border-b border-white/50 ">
-            <h1>Services</h1>
-          </div>
-          <div className="border-b border-white/50 ">
-            <h1>Projects</h1>
-          </div>
-          <div className="border-b border-white/50 ">
-            <h1>About Us</h1>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ========================================================= */
-/* ================= EXPORT ================= */
-/* ========================================================= */
-export default function Navbar() {
   return (
     <>
-      <div className="hidden md:block">
-        <DesktopNavbar />
+      {/* ── NAVBAR ── */}
+      <div ref={navRef} className="flex justify-between items-center w-screen px-3 md:px-10 h-14 md:h-16 ">
+        {/* Logo */}
+        <div className="text-xl md:text-2xl font-light flex items-start dark:text-white text-black gap-1">
+          <span className="uppercase">UPLICITY</span>
+          <sup className="text-[10px] mt-[10px]">™</sup>
+        </div>
+
+        {/* Right side */}
+        <div className="flex items-center dark:text-white text-black font-light gap-4">
+          <span className=" hidden md:block text-sm font-light opacity-70 tracking-wider">{dateTime}</span>
+          <span className="block md:hidden text-xs font-light opacity-70">{shortTime}</span>
+          <button
+            onClick={() => setOpen(true)}
+            onMouseEnter={(e) => {
+              const el = e.currentTarget.querySelector(".anim-text");
+              if (el) handleHover(el as HTMLElement, "MENU");
+            }}
+            className="flex items-center gap-2 border border-black/20 dark:border-white/20 rounded-full px-3 py-1.5 text-xs tracking-widest font-light hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition"
+          >
+            <span className="anim-text">MENU</span>
+            <Menu size={12} />
+          </button>
+        </div>
       </div>
-      <MobileNavbar />
+
+      {/* ── SLIDE MENU ── */}
+      <div
+        ref={menuRef}
+        className="fixed inset-0 top-0 left-0 w-full h-screen z-9999 translate-x-[-100%] p-2 md:p-4 bg-white dark:bg-black"
+      >
+        <div className="relative w-full h-full dark:bg-[#000000] bg-white border dark:border-white/10 border-black/10 rounded-2xl overflow-hidden flex flex-col">
+
+          {/* ── Top bar inside menu ── */}
+          <div className="flex justify-between items-center px-4 md:px-10 py-5 border-b dark:border-white/10 border-black/10">
+            <div className="text-sm md:text-base font-light dark:text-white text-black opacity-50 tracking-widest uppercase">
+              Navigation
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget.querySelector(".anim-text");
+                if (el) handleHover(el as HTMLElement, "CLOSE");
+              }}
+              className=" flex items-center gap-2 border border-black/20 dark:border-white/20 rounded-full px-3 py-1.5 text-xs tracking-widest font-light dark:text-white text-black hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition"
+            >
+              <span className="anim-text"> CLOSE </span>  <X size={12} />
+            </button>
+          </div>
+
+          {/* ── Nav links — outlet style ── */}
+          <div className="flex flex-col flex-1 justify-center px-6 md:px-10">
+            {navLinks.map(({ label, number, href }, i) => (
+              <Link
+                key={label}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="group flex items-center justify-between py-5 md:py-7 border-b dark:border-white/10 border-black/10 last:border-b-0">
+                {/* Number + Label */}
+                <div className="flex items-end gap-4">
+                  <span className="text-[10px] md:text-xs font-light opacity-30 dark:text-white text-black tracking-widest mb-1">
+                    /{number}
+                  </span>
+                  <span
+                    onMouseEnter={(e) =>
+                      handleHover(e.currentTarget, e.currentTarget.innerText)
+                    }
+                    onMouseLeave={(e) =>
+                      handleLeave(e.currentTarget, label)
+                    }
+                    className=" anim-text text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight dark:text-white text-black group-hover:translate-x-3 transition-transform duration-300">
+                    {label}
+                  </span>
+                </div>
+
+                {/* Arrow */}
+                <span className="text-xl md:text-2xl font-light opacity-20 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 dark:text-white text-black">
+                  ↗
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          {/* ── Bottom bar ── */}
+          <div className="flex items-end justify-between px-4 md:px-10 py-5 md:py-7 border-t dark:border-white/10 border-black/10">
+            {/* Left: time + location */}
+            <div className="flex flex-col gap-1">
+              <span className="text-[10px] tracking-widest uppercase opacity-40 dark:text-white text-black">
+                Local time
+              </span>
+              <span className="text-xs md:text-sm font-light opacity-60 dark:text-white text-black tracking-wider">
+                {dateTime}
+              </span>
+            </div>
+
+            {/* Right: theme toggle */}
+            <ThemeToggle />
+          </div>
+
+        </div>
+      </div>
     </>
   );
 }

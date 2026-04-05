@@ -33,7 +33,6 @@ export default function Service3() {
   return (
     <section
       className={`
-        ${anton.className}
         relative
         flex
         flex-col
@@ -42,28 +41,32 @@ export default function Service3() {
         h-[80vh]
         md:h-auto
         w-screen
-        overflow-hidden
-        text-white
-        bg-noise
+        overflow-hidden dark:bg-black bg-white
+        text-black dark:text-white
       `}
     >
       {/* BACKGROUND SVG */}
-      <img
+      {/* <img
         src="topography.svg"
         alt="svg"
         className="absolute inset-0 object-cover w-full h-full invert opacity-10 pointer-events-none md:hidden"
-      />
+      /> */}
 
       {/* CENTER CONTENT */}
-      <div className="relative z-10 px-4 py-10 text-center text-white/20 border-b-2 border-white/20">
-        <h1 className="text-center z-10 text-[clamp(5rem,13vw,13rem)] w-full leading-none scale-y-[0.80] ">
-          web development
+      <div className="relative z-10 px-4 py-10 text-center dark:text-white/80 text-black/80">
+        <h1 className="font-light uppercase text-center z-10 text-[clamp(5rem,8vw,13rem)] w-full">
+         3. web development
         </h1>
 
         <h2
-          className={`${anton.className} text-[clamp(2.8rem,1vw,1rem)] leading-none scale-y-[0.50] text-[#ffffffe9]`}
+          className={` absolute top-10 font-light text-xs max-w-md text-left dark:text-[#ffffff42] text-[#00000042]`}
         >
-          Custom web development services to build responsive and dynamic websites.
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero nam consequuntur eaque officia velit incidunt esse molestiae deleniti
+        </h2>
+        <h2
+          className={` absolute bottom-5 right-5 font-light text-xs max-w-md text-left dark:text-[#ffffff42] text-[#00000042]`}
+        >
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero nam consequuntur eaque officia velit incidunt esse molestiae deleniti similique, eum asperiores autem? Dolorum, porro expedita tenetur vel quam pariatur voluptate?
         </h2>
       </div>
 

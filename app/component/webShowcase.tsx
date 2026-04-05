@@ -99,7 +99,7 @@ export default function WebShowcase() {
   }, []);
 
   return (
-      <div className="relative overflow-hidden bg-noise w-full h-full py-20">
+      <div className="relative overflow-hidden bg-white dark:bg-black w-full h-full py-20">
         <Carousel slides={slideData} />
       </div>
   );

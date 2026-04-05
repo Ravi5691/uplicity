@@ -154,10 +154,10 @@ export default function ServiceStack() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-screen flex items-center justify-center bg-noise text-white overflow-hidden"
+      className="relative min-h-screen w-screen flex items-center justify-center bg-white dark:bg-black text-black dark:text-white overflow-hidden"
     >
       {/* HEADINGS */}
-      <div className={` ${inter.className} absolute md:top-10 top-0 text-center px-4 md:px-0 z-20`}>
+      <div className={`font-light absolute md:top-10 top-0 text-center px-4 md:px-0 z-20`}>
         <div
           ref={leftEaseIn}
           className="text-5xl sm:text-5xl md:text-8xl font-light"
@@ -190,7 +190,7 @@ export default function ServiceStack() {
 
 
       {/* CARD STACK */}
-      <div className="relative z-10 w-full flex justify-center md:h-[300px] items-end pb-10 mt-40 md:mt-0">
+      <div className="relative z-10 w-full flex justify-center md:h-[300px] items-end pb-10 mt-40 md:mt-0 text-white">
         <div className="relative flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
           {services.map((service, index) => (
             <div
