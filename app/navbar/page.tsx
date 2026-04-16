@@ -70,66 +70,67 @@ export default function NewNavbar() {
     { label: "CONTACT", number: "03", href: "#contact" },
   ];
 
-  useEffect(() => {
-    let lastScrollY = 0;
-    let isHidden = false;
-    let gsapInstance: any = null;
+  // useEffect(() => {
+  //   let lastScrollY = 0;
+  //   let isHidden = false;
+  //   let gsapInstance: any = null;
 
-    import("gsap").then(({ gsap }) => {
-      gsapInstance = gsap;
-    });
+  //   import("gsap").then(({ gsap }) => {
+  //     gsapInstance = gsap;
+  //   });
 
-    const handleScroll = () => {
-      const currentY = window.scrollY;
+  //   const handleScroll = () => {
+  //     const currentY = window.scrollY;
 
-      if (!gsapInstance || !navRef.current) {
-        lastScrollY = currentY;
-        return;
-      }
+  //     if (!gsapInstance || !navRef.current) {
+  //       lastScrollY = currentY;
+  //       return;
+  //     }
 
-      if (Math.abs(currentY - lastScrollY) < 5) return;
+  //     if (Math.abs(currentY - lastScrollY) < 5) return;
 
-      if (currentY > lastScrollY && currentY > 80) {
-        if (!isHidden) {
-          gsapInstance.to(navRef.current, {
-            y: -120,
-            opacity: 0,
-            duration: 1,
-            ease: "power2.out",
-          });
-          isHidden = true;
-        }
-      } else {
-        if (isHidden) {
-          gsapInstance.to(navRef.current, {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power2.out",
-          });
-          isHidden = false;
-        }
-      }
+  //     if (currentY > lastScrollY && currentY > 80) {
+  //       if (!isHidden) {
+  //         gsapInstance.to(navRef.current, {
+  //           y: -120,
+  //           opacity: 0,
+  //           duration: 1,
+  //           ease: "power2.out",
+  //         });
+  //         isHidden = true;
+  //       }
+  //     } else {
+  //       if (isHidden) {
+  //         gsapInstance.to(navRef.current, {
+  //           y: 0,
+  //           opacity: 1,
+  //           duration: 1,
+  //           ease: "power2.out",
+  //         });
+  //         isHidden = false;
+  //       }
+  //     }
 
-      lastScrollY = currentY;
-    };
+  //     lastScrollY = currentY;
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
 
   return (
     <>
       {/* ── NAVBAR ── */}
-      <div ref={navRef} className="flex justify-between items-center w-screen px-3 md:px-10 h-14 md:h-16 ">
+      <div className="flex justify-between items-center w-screen px-3 md:px-10 h-14 md:h-16 ">
+        {/* ref={navRef} */}
         {/* Logo */}
-        <div className="text-xl md:text-2xl font-light flex items-start dark:text-white text-black gap-1">
+        <div className="text-xl md:text-2xl font-light flex items-start text-white gap-1">
           <span className="uppercase">UPLICITY</span>
           <sup className="text-[10px] mt-[10px]">™</sup>
         </div>
 
         {/* Right side */}
-        <div className="flex items-center dark:text-white text-black font-light gap-4">
+        <div className="flex items-center text-white font-light gap-4">
           <span className=" hidden md:block text-sm font-light opacity-70 tracking-wider">{dateTime}</span>
           <span className="block md:hidden text-xs font-light opacity-70">{shortTime}</span>
           <button
@@ -149,13 +150,13 @@ export default function NewNavbar() {
       {/* ── SLIDE MENU ── */}
       <div
         ref={menuRef}
-        className="fixed inset-0 top-0 left-0 w-full h-screen z-9999 translate-x-[-100%] p-2 md:p-4 bg-white dark:bg-black"
+        className="fixed inset-0 top-0 left-0 w-full h-screen z-9999 translate-x-[-100%] p-2 md:p-4 bg-blue-500 bg-blur-xl"
       >
-        <div className="relative w-full h-full dark:bg-[#000000] bg-white border dark:border-white/10 border-black/10 rounded-2xl overflow-hidden flex flex-col">
+        <div className="relative w-full h-full border border-white/50 rounded-2xl overflow-hidden flex flex-col">
 
           {/* ── Top bar inside menu ── */}
-          <div className="flex justify-between items-center px-4 md:px-10 py-5 border-b dark:border-white/10 border-black/10">
-            <div className="text-sm md:text-base font-light dark:text-white text-black opacity-50 tracking-widest uppercase">
+          <div className="flex justify-between items-center px-4 md:px-10 py-5 border-b border-white/50 ">
+            <div className="text-sm md:text-base font-light text-white  opacity-50 tracking-widest uppercase">
               Navigation
             </div>
             <button

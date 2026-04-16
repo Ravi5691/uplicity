@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"], weight: ["200" ,"400", "700"] });
+const inter = Inter({ subsets: ["latin"], weight: ["200", "400", "700"] });
 gsap.registerPlugin(ScrollTrigger);
 
 const services = [
@@ -154,23 +154,32 @@ export default function ServiceStack() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-screen flex items-center justify-center bg-white dark:bg-black text-black dark:text-white overflow-hidden"
+      className="relative min-h-screen w-screen md:py-0 py-20 flex items-center justify-center bg-noise text-black dark:text-white overflow-hidden"
     >
+      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-20"
+        style={{ background: "linear-gradient(to top, #00000025 0%, transparent 60%)" }} />
+      <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-20"
+        style={{ background: "linear-gradient(to bottom, #00000025 0%, transparent 60%)" }} />
+
+      <div className="absolute top-0 right-0 md:h-[40%] md:w-[30%] h-[20%] w-[20%] rounded-bl-[4rem] bg-blue-400/20 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 md:h-[35%] md:w-[25%] h-[20%] w-[20%] rounded-tr-[4rem] bg-blue-500/10 pointer-events-none" />
+      <div className="absolute md:-top-50 -top-20 md:-left-50 -left-10 md:h-150 md:w-150 h-[40%] w-[40%] rounded-full bg-blue-100/20 pointer-events-none" />
+      <div className="absolute md:-bottom-20 -bottom-5 -right-10 md:-right-30 md:h-100 md:w-100 h-70 w-60 rounded-full bg-blue-100/20 pointer-events-none" />
       {/* HEADINGS */}
-      <div className={`font-light absolute md:top-10 top-0 text-center px-4 md:px-0 z-20`}>
+      <div className={`font-light absolute md:top-10 top-10 text-center px-4 md:px-0 z-20`}>
         <div
           ref={leftEaseIn}
           className="text-5xl sm:text-5xl md:text-8xl font-light"
         >
           Services Built{" "}
-          <span className="text-red-500 italic">to</span> Amplify
+          <span className="text-blue-700 italic">to</span> Amplify
         </div>
 
         <div
           ref={rightEaseIn}
           className="text-5xl sm:text-5xl md:text-8xl font-light"
         >
-          <span className="text-red-500 italic">your</span> Identity
+          <span className="text-blue-700 italic">your</span> Identity
         </div>
       </div>
 
@@ -197,18 +206,23 @@ export default function ServiceStack() {
               key={service.id}
               className={`
                 service-card
-                ${service.bgClass}
                 w-[90%] h-[230px]
                 md:w-[300px] md:h-[320px]
                 md:p-6 p-4
-                relative md:absolute
+                relative md:absolute shadow-xl
               `}
               style={{
                 transformOrigin: "center center",
                 rotate: `${service.angle}deg`,
                 zIndex: services.length - index,
+                backgroundImage: "url('cardBg.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
               }}
             >
+              <div className="absolute inset-0 bg-blue-700/40 h-full w-full">
+              </div>
               {/* LOGO */}
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-black/20 flex items-center justify-center text-sm font-semibold uppercase">
@@ -221,16 +235,16 @@ export default function ServiceStack() {
 
               {/* CONTENT */}
               <div className="mt-10 space-y-3">
-                <h3 className="text-xl md:text-2xl font-semibold">
+                <h3 className="text-xl md:text-2xl opacity-95 font-semibold text-white">
                   {service.title}
                 </h3>
-                <p className="text-sm opacity-90 leading-relaxed">
+                <p className="text-base opacity-95  leading-relaxed">
                   {service.description}
                 </p>
               </div>
 
               {/* FOOTER */}
-              <div className="md:mt-8 mt-4 text-xs opacity-80">
+              <div className="md:mt-8 mt-4 text-sm opacity-80">
                 Scroll to expand →
               </div>
             </div>

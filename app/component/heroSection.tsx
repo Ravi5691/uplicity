@@ -2,6 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -9,47 +12,47 @@ export default function HeroSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const lines = gsap.utils.toArray(".line");
-      const subtitle = ".subtitle-line";
+      const titleLines = gsap.utils.toArray<HTMLElement>(".line");
 
-      gsap.set(boxesRef.current, {
-        opacity: 0,
-        rotateX: 15,
-        y: 40,
-        transformOrigin: "center center",
-      });
-
-      const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
-        delay: 0.8,
-      });
-
-      tl.from(lines, {
-        yPercent: 120,
-        opacity: 0,
-        duration: 1.8,
-        stagger: 0.15,
-      })
-        .from(
-          subtitle,
+      if (titleLines.length) {
+        gsap.fromTo(
+          titleLines,
+          { y: "110%", opacity: 0 },
           {
-            yPercent: 120,
-            opacity: 0,
-            duration: 1,
-          },
-          "-=0.6"
-        )
-        .to(
-          boxesRef.current,
-          {
+            y: "0%",
             opacity: 1,
-            rotateX: 0,
-            y: 0,
             duration: 1.2,
-            ease: "power3.out",
-          },
-          "+=0.2" // waits until text animation fully ends
+            ease: "power1.out",
+            stagger: 0.12,
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: "top 82%",
+              once: true,
+            },
+          }
         );
+      }
+
+      // optional: keep your boxes animation
+      gsap.fromTo(
+        boxesRef.current,
+        {
+          opacity: 0,
+          rotateX: 15,
+          y: 40,
+        },
+        {
+          opacity: 1,
+          rotateX: 0,
+          y: 0,
+          duration: 1.8,
+          ease: "power1.out",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top 75%",
+          },
+        }
+      );
     }, heroRef);
 
     return () => ctx.revert();
@@ -58,28 +61,66 @@ export default function HeroSection() {
   return (
     <div
       ref={heroRef}
-      className={` font-extralight relative pointer-events-none text-white flex flex-col gap-5 justify-center items-center h-screen w-screen dark:bg-black bg-white p-10 pb-0`}
+      className="font-extralight relative pointer-events-none text-white flex flex-col gap-5 justify-center items-center h-screen w-screen bg-blue-500 p-10 pb-0 overflow-hidden"
     >
-      <div className="absolute z-10 top-16 right-10 h-[45%] w-[20%] bg-white/20 flex shadow-inner shadow-black sahdow-lg">
-        <img src="image.png" alt="" className=" object-center object-cover h-full w-full" />
-      </div>
-      <div className="absolute top-14 left-0 h-[1px] w-[80%] bg-gradient-to-l dark:from-black dark:to-white/50 from-white to-black/50"></div>
-      <div className="absolute top-0 left-7 h-[60%] w-[1px] bg-gradient-to-t dark:from-black dark:to-white/50 from-white to-black/50"></div>
-      <div className="absolute top-16 left-9 max-w-md text-black/50 dark:text-white/50 text-xs">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt at ad cupiditate corporis rem sapiente saepe? Doloribus ducimus distinctio velit est impedit voluptate ut, corrupti placeat dignissimos quod. Enim?
-      </div>
-      <div className="absolute -top-100 -right-50 h-[80%] w-[90%] rotate-45 rounded-4xl bg-black/3 dark:bg-white/2"></div>
-      <div className="absolute -top-120 -right-40 h-[80%] w-[90%] rotate-55 rounded-4xl bg-black/4 dark:bg-white/3"></div>
-      <div className="absolute -top-160 -right-10 h-[80%] w-[90%] rotate-70 rounded-4xl bg-black/3 dark:bg-white/2"></div>
-      <div className="w-full h-full flex items-end z-10 relative">
-        <h1 className="md:text-[10.5vw] text-[52px] dark:text-white text-black text-left md:leading-none leading-13 overflow-hidden uppercase">
-          <span className="block line">
-            Social <span className="text-red-500">Media</span>
-          </span>
-          <span className="block line">Content Agency</span>
-        </h1>
+      {/* Description block — repositioned for mobile */}
+      <div className="z-20 absolute md:top-20 md:bottom-auto md:left-11 md:right-auto bottom-4 right-4 md:max-w-xs max-w-[160px] uppercase tracking-wider text-white/80 md:text-xs text-[8px]">
+        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt at ad cupiditate</span>
+        <div className="grid grid-cols-5 max-w-35 mt-2">
+          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
+          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
+          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
+          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
+          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
+        </div>
       </div>
 
+      {/* Service tag bar */}
+      <div className="text-white w-full md:text-xs text-[6px] flex justify-between md:px-10 px-2 absolute md:top-1/3 top-2/5 uppercase tracking-wider -translate-y-1/2 border-2 border-white/10 z-10">
+        <div>Service Agency</div>
+        <div>// Smoothness</div>
+      </div>
+
+      {/* Blur orb — scaled for mobile */}
+      <div className="absolute md:-top-[130px] top-20 md:h-[100vw] h-[60vh] w-[60vh] md:w-screen rounded-full bg-white bg-backdrop blur-3xl inset-0 pointer-events-none"></div>
+
+      {/* Hero image — always pinned to bottom, full height on all breakpoints */}
+      <div className="absolute
+        md:h-screen h-[75vh]
+        md:left-1/2 left-1/2
+        md:-translate-x-1/2 -translate-x-1/2
+        bottom-0
+        w-auto
+        flex items-end justify-center z-10
+      ">
+        <img
+          src="image2.png"
+          alt=""
+          className="object-contain object-bottom h-full w-auto -scale-x-100 max-w-none"
+        />
+      </div>
+
+      {/* Headline text — left-aligned, responsive sizing */}
+      <div className="md:w-full w-screen h-full flex md:items-end items-start z-20 relative md:px-0 px-4 md:mt-0 mt-5">
+        <h1 className="
+          md:text-[10.5vw] text-[13vw]
+          text-black/80
+          bg-clip-text mix-blend-difference
+          text-left md:leading-none leading-tight
+          overflow-hidden uppercase
+        ">
+          <span className="block overflow-hidden">
+            <span className="block line">
+              Social <span className="text-blue-600">Media</span>
+            </span>
+          </span>
+          <span className="block overflow-hidden">
+            <span className="block line">
+              Content <span className="text-blue-600">Agency</span>
+            </span>
+          </span>
+        </h1>
+      </div>
     </div>
   );
 }

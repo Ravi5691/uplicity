@@ -1,150 +1,150 @@
-"use client"
-import { Lora, Anton } from "next/font/google";
-import { useRef } from "react";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+"use client";
 
-const lora = Lora({ subsets: ["latin"], weight: ["400", "700"] });
-const anton = Anton({ subsets: ["latin"], weight: ["400"] });
+import { useRef } from "react";
+import { useScroll, useTransform, motion } from "framer-motion";
+import Image from "next/image";
 
 const projects = [
-  { id: 1, img: "/webService/1.webp" },
-  { id: 2, img: "/webService/2.webp" },
-  { id: 3, img: "/webService/3.webp" },
-  { id: 4, img: "/webService/4.webp" },
+  {
+    title: "Matthias Leidinger",
+    description:
+      "Originally hailing from Austria, Berlin-based photographer Matthias Leindinger is a young creative brimming with talent and ideas.",
+    src: "/webService/1.webp",
+    url: "https://modepro.vercel.app/",
+    color: "#ffffff40",
+  },
+  {
+    title: "Clément Chapillon",
+    description:
+      "This is a story on the border between reality and imaginary, about the contradictory feelings that the insularity of a rocky territory provokes.",
+    src: "/webService/2.webp",
+    url: "https://www.krivisio.com/",
+    color: "#ffffff40",
+  },
+  {
+    title: "Zissou",
+    description:
+      "Though he views photography as a medium for storytelling, Zissou's images don't insist on a narrative.",
+    src: "/webService/3.webp",
+    url: "https://ravinder-portfolio.vercel.app/",
+    color: "#ffffff40",
+  },
 ];
 
-export default function Service3() {
-  const sliderRef = useRef<HTMLDivElement | null>(null);
+function Card({
+  i,
+  title,
+  description,
+  src,
+  url,
+  color,
+  progress,
+  range,
+  targetScale,
+}: any) {
+  const container = useRef(null);
 
-  const scrollLeft = () => {
-    sliderRef.current?.scrollBy({
-      left: -window.innerWidth,
-      behavior: "smooth",
-    });
-  };
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start end", "start start"],
+  });
 
-  const scrollRight = () => {
-    sliderRef.current?.scrollBy({
-      left: window.innerWidth,
-      behavior: "smooth",
-    });
-  };
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
+  const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
-    <section
-      className={`
-        relative
-        flex
-        flex-col
-        justify-center
-        items-center
-        h-[80vh]
-        md:h-auto
-        w-screen
-        overflow-hidden dark:bg-black bg-white
-        text-black dark:text-white
-      `}
+    // ✅ sticky top is on the outer container, offset by card index
+    <div
+      ref={container}
+      className="h-screen flex items-center justify-center sticky"
+      style={{ top: `${i * 25}px` }}   // ← moved here, progressive offset
     >
-      {/* BACKGROUND SVG */}
-      {/* <img
-        src="topography.svg"
-        alt="svg"
-        className="absolute inset-0 object-cover w-full h-full invert opacity-10 pointer-events-none md:hidden"
-      /> */}
-
-      {/* CENTER CONTENT */}
-      <div className="relative z-10 px-4 py-10 text-center dark:text-white/80 text-black/80">
-        <h1 className="font-light uppercase text-center z-10 text-[clamp(5rem,8vw,13rem)] w-full">
-         3. web development
-        </h1>
-
-        <h2
-          className={` absolute top-10 font-light text-xs max-w-md text-left dark:text-[#ffffff42] text-[#00000042]`}
-        >
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero nam consequuntur eaque officia velit incidunt esse molestiae deleniti
-        </h2>
-        <h2
-          className={` absolute bottom-5 right-5 font-light text-xs max-w-md text-left dark:text-[#ffffff42] text-[#00000042]`}
-        >
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero nam consequuntur eaque officia velit incidunt esse molestiae deleniti similique, eum asperiores autem? Dolorum, porro expedita tenetur vel quam pariatur voluptate?
-        </h2>
-      </div>
-
-      {/* ================= MOBILE WEB SHOWCASE ================= */}
-      <div className="relative z-10 w-full h-[60%] mt-8 md:hidden">
-        <div
-          ref={sliderRef}
-          className="
-            flex
-            w-full
-            h-[90%]
-            overflow-x-auto
-            snap-x snap-mandatory
-            scroll-smooth
-            no-scrollbar
-          "
-        >
-          {projects.map((p) => (
-            <div
-              key={p.id}
-              className="w-screen h-full shrink-0 snap-center px-4"
-            >
-              <div className="relative h-full w-full overflow-hidden border border-white/50">
-                <img
-                  src={p.img}
-                  alt=""
-                  className="h-[50%] w-full object-cover"
+      <motion.div
+        style={{
+          backgroundColor: color,
+          scale,
+          // ✅ no top offset here — origin-top handles the stack anchor
+        }}
+        className="relative flex flex-col w-[90%] max-w-[1250px] md:h-[680px] h-[340px] rounded-4xl origin-top overflow-hidden shadow-2xl"
+      >
+        <h2 className="text-center text-2xl font-semibold">{title}</h2>
+        {/* <div className="flex h-full mt-10 gap-10"> */}
+        {/* <div className="w-[40%] relative top-[10%]">
+            <p className="text-sm leading-relaxed">{description}</p>
+            <span className="flex items-center gap-2 mt-3">
+              <a href={url} target="_blank" className="text-xs underline">
+                See more
+              </a>
+              <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
+                <path
+                  d="M21.53 6.53c.29-.29.29-.76 0-1.06L16.76.7a.75.75 0 0 0-1.06 1.06L19.94 6l-4.24 4.24a.75.75 0 1 0 1.06 1.06l4.77-4.77ZM0 6.75h21v-1.5H0v1.5Z"
+                  fill="black"
                 />
-
-                <div className="h-[20%] w-full grid grid-cols-3 gap-1">
-                  <div className="bg-amber-200" />
-                  <div className="bg-amber-200" />
-                  <div className="bg-amber-200" />
-                </div>
-
-                <div className="h-[30%] p-4 bg-black/80 backdrop-blur-md text-[12px]">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam neque unde doloribus amet quo illum nulla eos hic consequatur sit vitae molestias, ducimus maxime sapiente saepe earum facilis fuga nobis.
-                </div>
-              </div>
-            </div>
-          ))}
+              </svg>
+            </span>
+          </div> */}
+        {/* </div> */}
+        <div className="absolute w-full h-full overflow-hidden">
+          <motion.div style={{ scale: imageScale }} className="w-full h-full">
+            <Image
+              fill
+              src={`${src}`}
+              alt="image"
+              className="object-cover"
+            />
+          </motion.div>
         </div>
+      </motion.div>
+    </div>
+  );
+}
 
-        {/* ================= ARROW CONTROLS ================= */}
-        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 flex gap-6">
-          <button
-            onClick={scrollLeft}
-            className="
-              h-12 w-12
-              rounded-full
-              flex items-center justify-center
-              bg-white/5
-              backdrop-blur-xs
-              border border-white/30
-              text-white
-              active:scale-95
-            "
-          >
-            <IoChevronBack size={22} />
-          </button>
+export default function Service3() {
+  const container = useRef(null);
 
-          <button
-            onClick={scrollRight}
-            className="
-              h-12 w-12
-              rounded-full
-              flex items-center justify-center
-              bg-white/5
-              backdrop-blur-xs
-              border border-white/30
-              text-white
-              active:scale-95
-            "
-          >
-            <IoChevronForward size={22} />
-          </button>
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"],
+  });
+
+  return (
+    <section className="relative flex flex-col items-center w-screen bg-[#acd3ff] text-black">
+      <div className="relative z-10 flex flex-col items-center pt-14 pb-8 px-4 text-center">
+        <div className="inline-flex items-center gap-2 bg-blue-500/15 border border-blue-500/30 text-blue-900 text-[11px] uppercase tracking-[.15em] px-4 py-1.5 rounded-full mb-5">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+          Service 02 — Web Dev
         </div>
+        <h1 className="font-light uppercase text-[clamp(2.6rem,6.5vw,10rem)] leading-[.92] tracking-tighter text-black/80 w-full">
+          Projects that <span className="italic text-blue-600">speak</span>
+        </h1>
+        <p className="text-black/40 text-xs sm:text-sm max-w-sm leading-relaxed mt-5">
+          Each site is crafted with intent — from interaction to animation, built to convert.
+        </p>
       </div>
+
+      {/* ✅ No mt/mb offset — scroll height is purely driven by card count */}
+      <main
+        ref={container}
+        className="relative w-full"
+        style={{ height: `${projects.length * 100}vh` }}
+      >
+        {projects.map((project, i) => {
+          const targetScale = 1 - (projects.length - i) * 0.05;
+          // ✅ Evenly distributed ranges across [0, 1]
+          const rangeStart = i / projects.length;
+          const rangeEnd = (i + 1) / projects.length;
+          return (
+            <Card
+              key={i}
+              i={i}
+              {...project}
+              progress={scrollYProgress}
+              range={[rangeStart, rangeEnd]}
+              targetScale={targetScale}
+            />
+          );
+        })}
+      </main>
     </section>
   );
 }
