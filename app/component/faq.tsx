@@ -35,87 +35,80 @@ export default function FAQSection() {
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="dark:bg-black bg-white dark:text-white text-black min-h-screen w-screen px-6 md:px-15 py-16 md:py-24 relative overflow-hidden">
+    <section className="bg-[#acd3ff] text-black min-h-screen w-screen px-4 md:px-8 py-12 md:py-20 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[350px_1fr] gap-8 md:gap-10 lg:gap-12">
 
-      {/* Scan-line animation */}
-      {/* <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="scan-line absolute left-0 right-0 h-px bg-white/5" />
-      </div> */}
-      <div className="absolute top-50 -right-50 h-[50%] w-[20%] rotate-45 rounded-4xl bg-black/3 dark:bg-white/3"></div>
-      <div className="absolute top-30 -left-80 h-[50%] w-[40%] rotate-55 rounded-4xl bg-black/4 dark:bg-white/3"></div>
-      {/* Header */}
-      <div className="flex items-end justify-between border-b dark:border-white/10 border-black/10 pb-7 mb-0">
-        <div>
-          <p className="text-[11px] tracking-[0.25em] dark:text-white/30 text-black/30 uppercase mb-2">
-            // system.faq
-          </p>
-          <h2 className="text-4xl md:text-6xl font-light">
-            Frequently asked<br />questions
-          </h2>
-        </div>
-        <span className="text-[11px] tracking-widest dark:text-white/20 text-black/20 pb-1">
-          {String(faqs.length).padStart(2, "0")} ENTRIES
-        </span>
-      </div>
+          {/* Left Sidebar */}
+          <div className="flex flex-col items-start pr-0 md:pr-8 lg:pr-12 md:mb-0">
+            <h2 className="text-6xl md:text-7xl lg:text-8xl font-light text-blue-700 leading-none">
+              <span className="text-black/80 font-light text-6xl md:text-7xl lg:text-8xl">FA</span>Q
+            </h2>
 
-      {/* FAQ list */}
-      <div>
-        {faqs.map((faq, i) => {
-          const isOpen = openIndex === i;
-          return (
-            <div
-              key={i}
-              className={`border-t transition-colors duration-200 last:border-b ${isOpen ? "dark:border-white border-black  dark:last:border-white last:border-black " : "dark:border-white/10 border-black/10 dark:last:border-white/10 last:border-black/10"
-                }`}
-            >
-              {/* Question row */}
-              <button
-                onClick={() => toggle(i)}
-                className="flex items-center gap-5 w-full py-6 text-left cursor-pointer group"
-              >
-                <span
-                  className={`text-[11px] tracking-widest min-w-[32px] transition-colors duration-200 ${isOpen ? "dark:text-white text-black" : "dark:text-white/25 text-black/25"
-                    }`}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+            {/* Decorative Rings */}
 
-                <span
-                  className={`flex-1 text-base md:text-lg font-light tracking-wide transition-colors duration-200 ${isOpen ? "dark:text-white text-black" : "dark:text-white/60 text-black/60"
-                    }`}
-                >
-                  {faq.q}
-                </span>
+            {/* Additional info on desktop */}
+            {/* <p className="text-xs tracking-widest text-blue-700/60 uppercase mt-8 hidden md:block">
+              {String(faqs.length).padStart(2, "0")} Questions
+            </p> */}
 
-                {/* Toggle button */}
+            {/* <div className="flex gap-4 items-center">
+              <div className="w-12 h-12 rounded-full border-3 border-blue-700 flex-shrink-0"></div>
+              <div className="w-12 h-12 rounded-full border-3 border-blue-700 flex-shrink-0 -ml-6"></div>
+              <div className="w-12 h-12 rounded-full border-3 border-blue-700 flex-shrink-0 -ml-6"></div>
+            </div> */}
+          </div>
+
+          {/* Right Content */}
+          <div className="w-full flex flex-col gap-5">
+            {faqs.map((faq, i) => {
+              const isOpen = openIndex === i;
+              return (
                 <div
-                  className={`w-7 h-7 flex items-center justify-center border text-base flex-shrink-0 transition-all duration-200 ${isOpen
-                    ? "dark:border-white dark:bg-white border-black bg-black dark:text-black text-white"
-                    : "dark:border-white/20 border-black/20  dark:text-white/30 text-black/30"
-                    }`}
+                  key={i}
+                  className="bg-white rounded-xl overflow-hidden shadow-sm"
                 >
-                  {isOpen ? "×" : "+"}
-                </div>
-              </button>
+                  {/* Question row */}
+                  <button
+                    onClick={() => toggle(i)}
+                    className="flex items-start md:items-center justify-between gap-4 md:gap-6 w-full py-5 md:py-6 text-left cursor-pointer group hover:bg-gray-50 transition-colors px-4 md:px-6"
+                  >
+                    {/* Plus/Minus Icon */}
+                    <span
+                      className={`flex-1 text-sm md:text-base lg:text-lg tracking-wide transition-colors duration-200 ${isOpen ? " text-blue-700" : " text-black"
+                        }`}
+                    >
+                      {faq.q}
+                    </span>
 
-              {/* Answer — animated with grid trick (no JS height calc needed) */}
-              <div
-                className={`grid transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                  }`}
-              >
-                <div className="overflow-hidden">
-                  <div className="flex gap-8 pl-[52px] pb-7">
-                    {/* Vertical white bar */}
-                    <div className="w-px dark:bg-white bg-black self-stretch flex-shrink-0" />
-                    <p className="text-sm leading-7 dark:text-white/45 text-black/45 tracking-wide">
-                      {faq.a}
-                    </p>
+                    <div
+                      className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-sm flex-shrink-0 transition-all duration-300 font-bold text-lg md:text-xl ${isOpen
+                        ? " bg-blue-700 text-white "
+                        : "bg-blue-200 "
+                        }`}
+                    >
+                      {isOpen ? "−" : "+"}
+                    </div>
+
+                  </button>
+
+                  {/* Answer — animated with grid trick */}
+                  {/* Answer */}
+                  <div
+                    className={`grid transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? "grid-rows-[1fr] opacity-100 " : "grid-rows-[0fr] opacity-0 "
+                      }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="px-4 md:px-6 pb-5 md:pb-6 pt-0 text-xs md:text-sm leading-6 md:leading-7 text-black/70 tracking-wide">
+                        {faq.a}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <style jsx>{`

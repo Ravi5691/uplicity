@@ -1,15 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { Anton } from "next/font/google";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const anton = Anton({ subsets: ["latin"], weight: ["400"] });
-
 gsap.registerPlugin(ScrollTrigger);
 
-// ─── data ─────────────────────────────────────────────────────────────────────
 const VIDEO_PROJECTS = [
   {
     num: "01",
@@ -18,8 +14,9 @@ const VIDEO_PROJECTS = [
     category: "Commercial",
     duration: "2:30",
     year: "2024",
-    thumb: "/webService/3.webp",
+    thumb: "/videoService/1.png",
     tags: ["Color Grading", "Motion Graphics"],
+    desc: "A cinematic deep-dive into the brand's ethos — raw energy, fearless movement, and the relentless pursuit of greatness.",
   },
   {
     num: "02",
@@ -28,8 +25,9 @@ const VIDEO_PROJECTS = [
     category: "Corporate",
     duration: "1:45",
     year: "2024",
-    thumb: "/webService/3.webp",
+    thumb: "/videoService/4.png",
     tags: ["VFX", "3D Integration"],
+    desc: "Precision meets poetry. A product reveal that strips everything back to reveal the beauty in the detail.",
   },
   {
     num: "03",
@@ -38,8 +36,9 @@ const VIDEO_PROJECTS = [
     category: "Narrative",
     duration: "12:00",
     year: "2023",
-    thumb: "/webService/3.webp",
+    thumb: "/videoService/2.png",
     tags: ["Colour", "Sound Design"],
+    desc: "A slow-burn narrative between memory and imagination — every frame hand-graded to breathe with the story.",
   },
   {
     num: "04",
@@ -48,8 +47,9 @@ const VIDEO_PROJECTS = [
     category: "Documentary",
     duration: "5:20",
     year: "2024",
-    thumb: "/webService/3.webp",
+    thumb: "/videoService/3.png",
     tags: ["Multi-cam", "Graphics"],
+    desc: "Capturing the electricity of ideas in a room — multi-camera precision edited into a seamless, kinetic recap.",
   },
   {
     num: "05",
@@ -58,8 +58,9 @@ const VIDEO_PROJECTS = [
     category: "Entertainment",
     duration: "3:15",
     year: "2023",
-    thumb: "/webService/3.webp",
+    thumb: "/videoService/4.png",
     tags: ["VFX", "Color"],
+    desc: "Visual storytelling that moves with the beat — chromatic explosions, frame-perfect cuts, and a world built from light.",
   },
   {
     num: "06",
@@ -68,415 +69,377 @@ const VIDEO_PROJECTS = [
     category: "Social Media",
     duration: "0:30",
     year: "2024",
-    thumb: "/webService/3.webp",
+    thumb: "/videoService/1.png",
     tags: ["Fast Cut", "Motion"],
+    desc: "Six seconds to stop the scroll. Each reel engineered for impact — hooks, rhythm, and a single unforgettable moment.",
   },
 ];
 
-const TICKER_ITEMS = [
-  "COLOR GRADING",
-  "MOTION GRAPHICS",
-  "VFX",
-  "SOUND DESIGN",
-  "3D INTEGRATION",
-  "MULTI-CAM EDIT",
-  "REEL CUTS",
-  "NARRATIVE EDIT",
-];
-
-const STATS = [
-  { label: "Projects", value: 120 },
-  { label: "Clients", value: 48 },
-  { label: "Awards", value: 9 },
-  { label: "Years", value: 6 },
-];
-
-// ─── inner carousel ───────────────────────────────────────────────────────────
-function VideoCarousel() {
-  const [cur, setCur] = useState(0);
-  const [animating, setAnimating] = useState(false);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const touchStartX = useRef(0);
-  const total = VIDEO_PROJECTS.length;
-
-  const go = useCallback(
-    (next: number) => {
-      if (animating) return;
-      const n = ((next % total) + total) % total;
-      setAnimating(true);
-      gsap.to(trackRef.current, {
-        x: `-${n * 100}%`,
-        duration: 0.72,
-        ease: "expo.inOut",
-        onComplete: () => {
-          setCur(n);
-          setAnimating(false);
-        },
-      });
-    },
-    [animating, total]
-  );
-
-  const startAuto = useCallback(() => {
-    autoRef.current = setInterval(() => {
-      setCur((c) => {
-        const next = (c + 1) % total;
-        gsap.to(trackRef.current, {
-          x: `-${next * 100}%`,
-          duration: 0.72,
-          ease: "expo.inOut",
-        });
-        return next;
-      });
-    }, 4500);
-  }, [total]);
-
-  const stopAuto = useCallback(() => {
-    if (autoRef.current) clearInterval(autoRef.current);
-  }, []);
-
-  useEffect(() => {
-    startAuto();
-    return () => stopAuto();
-  }, [startAuto, stopAuto]);
-
-  // subtle zoom on active image
-  useEffect(() => {
-    const imgs = trackRef.current?.querySelectorAll<HTMLElement>(".v-thumb");
-    imgs?.forEach((img, i) => {
-      gsap.to(img, {
-        scale: i === cur ? 1.05 : 1,
-        duration: 0.9,
-        ease: "power2.out",
-      });
-    });
-  }, [cur]);
-
-  return (
-    <section
-      className="w-full"
-      onMouseEnter={stopAuto}
-      onMouseLeave={startAuto}
-    >
-      {/* ── slide track ─────────────────────────────────────────────────────── */}
-      <div
-        className="relative overflow-hidden w-full flex justify-center border-t border-b border-black/10 dark:border-white/10"
-        onTouchStart={(e) => {
-          touchStartX.current = e.touches[0].clientX;
-        }}
-        onTouchEnd={(e) => {
-          const dx = e.changedTouches[0].clientX - touchStartX.current;
-          if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
-        }}
-      >
-        <div
-          ref={trackRef}
-          className="flex will-change-transform w-full"
-          style={{ transform: "translateX(0%)" }}
-        >
-          {VIDEO_PROJECTS.map((p) => (
-            <div
-              key={p.num}
-              className="flex-none w-full grid grid-cols-1 sm:grid-cols-2 min-h-[300px] sm:min-h-[460px]"
-            >
-              {/* image */}
-              <div className="relative overflow-hidden bg-black/5 dark:bg-white/5 h-[220px] sm:h-auto order-2 sm:order-1">
-                <img
-                  src={p.thumb}
-                  alt={p.title}
-                  className="v-thumb w-full h-full object-cover"
-                  loading="lazy"
-                />
-                {/* scanline */}
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    backgroundImage:
-                      "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px)",
-                  }}
-                />
-                {/* gradient fade */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 55%)",
-                  }}
-                />
-                {/* play */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-14 h-14 rounded-full border border-white/40 bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="white"
-                      className="w-5 h-5 ml-0.5"
-                      opacity={0.9}
-                    >
-                      <polygon points="5,3 19,12 5,21" />
-                    </svg>
-                  </div>
-                </div>
-                {/* duration */}
-                <span className="absolute bottom-3 left-3 text-[10px] uppercase tracking-widest px-2 py-1 bg-black/50 backdrop-blur-sm text-white/80 border border-white/15">
-                  {p.duration}
-                </span>
-                {/* category */}
-                <span className="absolute top-3 right-3 text-[9px] uppercase tracking-widest px-2 py-1 bg-black/40 backdrop-blur-sm text-white/70 border border-white/20">
-                  {p.category}
-                </span>
-              </div>
-
-              {/* info */}
-              <div className="flex flex-col justify-between px-6 py-8 sm:px-10 sm:py-12 order-1 sm:order-2 border-b sm:border-b-0 sm:border-l border-black/10 dark:border-white/10">
-                <div>
-                  <div className="flex items-center gap-3 mb-6 sm:mb-10">
-                    <span className="text-[10px] uppercase tracking-[0.3em] text-black/40 dark:text-white/40">
-                      {p.num}
-                    </span>
-                    <span className="flex-1 h-px bg-black/10 dark:bg-white/10" />
-                    <span className="text-[10px] uppercase tracking-[0.2em] text-black/30 dark:text-white/30">
-                      {p.year}
-                    </span>
-                  </div>
-
-                  <h3 className="font-light text-3xl sm:text-4xl md:text-[3.2rem] leading-none mb-3 sm:mb-4 text-black dark:text-white">
-                    {p.title}
-                  </h3>
-
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-black/40 dark:text-white/40 mb-6 sm:mb-8">
-                    {p.client}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {p.tags.map((t) => (
-                      <span
-                        key={t}
-                        className="text-[9px] uppercase tracking-[0.2em] px-2.5 py-1 border border-black/15 dark:border-white/15 text-black/50 dark:text-white/50"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <button className="mt-8 self-start flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] group text-black dark:text-white">
-                  <span className="border-b border-black/30 dark:border-white/30 group-hover:border-black dark:group-hover:border-white transition-colors duration-200">
-                    View Project
-                  </span>
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={1.5}
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* progress bar */}
-      <div className="w-full h-px bg-black/8 dark:bg-white/8 overflow-hidden">
-        <div
-          className="h-full bg-black dark:bg-white transition-all duration-700 ease-[cubic-bezier(0.77,0,0.18,1)]"
-          style={{ width: `${((cur + 1) / total) * 100}%` }}
-        />
-      </div>
-
-      {/* controls */}
-      <div className="flex items-center justify-between px-4 sm:px-8 md:px-12 py-4">
-        {/* dots */}
-        <div className="flex items-center gap-2">
-          {VIDEO_PROJECTS.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => go(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              className="h-px bg-black dark:bg-white transition-all duration-300"
-              style={{ width: i === cur ? 32 : 16, opacity: i === cur ? 1 : 0.2 }}
-            />
-          ))}
-        </div>
-
-        {/* counter */}
-        <span className="text-[10px] uppercase tracking-[0.25em] text-black/35 dark:text-white/35">
-          {String(cur + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
-        </span>
-
-        {/* arrows */}
-        <div className="flex gap-2">
-          {(["left", "right"] as const).map((dir) => (
-            <button
-              key={dir}
-              onClick={() => go(dir === "left" ? cur - 1 : cur + 1)}
-              aria-label={dir === "left" ? "Previous" : "Next"}
-              className="w-9 h-9 border border-black/15 dark:border-white/15 flex items-center justify-center hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-200"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                {dir === "left" ? (
-                  <polyline points="15 18 9 12 15 6" />
-                ) : (
-                  <polyline points="9 18 15 12 9 6" />
-                )}
-              </svg>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── main export ──────────────────────────────────────────────────────────────
 export default function Service1() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const tickerInnerRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
+  const lineInnerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<HTMLDivElement[]>([]);
 
-  // stats counter on scroll
   useEffect(() => {
-    if (!statsRef.current) return;
-    const nums = statsRef.current.querySelectorAll<HTMLElement>(".stat-num");
-    nums.forEach((el) => {
-      const target = parseInt(el.getAttribute("data-target") || "0", 10);
+    const ctx = gsap.context(() => {
+
+      // ── Title line-reveal ──────────────────────────────────────────
+      const titleLines = headingRef.current?.querySelectorAll<HTMLElement>(".title-line");
+      if (titleLines) {
+        gsap.fromTo(
+          titleLines,
+          { y: "110%", opacity: 0 },
+          {
+            y: "0%",
+            opacity: 1,
+            duration: 1.1,
+            ease: "power4.out",
+            stagger: 0.12,
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 82%",
+              once: true,
+            },
+          }
+        );
+      }
+
+      // Badge + subtitle
       gsap.fromTo(
-        { val: 0 },
-        { val: target },
+        headingRef.current?.querySelectorAll<HTMLElement>(".fade-up") ?? [],
+        { y: 28, opacity: 0 },
         {
-          duration: 2,
-          ease: "power2.out",
-          onUpdate: function () {
-            el.textContent = Math.round(this.targets()[0].val).toString();
-          },
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.1,
+          delay: 0.25,
           scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 85%",
+            trigger: headingRef.current,
+            start: "top 82%",
             once: true,
           },
         }
       );
-    });
-  }, []);
 
-  // infinite ticker
-  useEffect(() => {
-    if (!tickerInnerRef.current) return;
-    gsap.to(tickerInnerRef.current, {
-      xPercent: -50,
-      duration: 20,
-      ease: "none",
-      repeat: -1,
-    });
+      // ── Vertical progress line grow ────────────────────────────────
+      if (lineInnerRef.current && lineRef.current) {
+        gsap.fromTo(
+          lineInnerRef.current,
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            ease: "none",
+            transformOrigin: "top center",
+            scrollTrigger: {
+              trigger: lineRef.current,
+              start: "top 60%",
+              end: "bottom 40%",
+              scrub: 1,
+            },
+          }
+        );
+      }
+
+      // ── Per-project card animations ────────────────────────────────
+      itemRefs.current.forEach((item, i) => {
+        if (!item) return;
+        const isEven = i % 2 === 0; // even = video left, odd = video right
+
+        const imgWrap = item.querySelector<HTMLElement>(".proj-img");
+        const infoWrap = item.querySelector<HTMLElement>(".proj-info");
+        const dot = item.querySelector<HTMLElement>(".proj-dot");
+        const numLabel = item.querySelector<HTMLElement>(".proj-num");
+
+        // dot pulse in
+        if (dot) {
+          gsap.fromTo(
+            dot,
+            { scale: 0, opacity: 0 },
+            {
+              scale: 1,
+              opacity: 1,
+              duration: 0.5,
+              ease: "back.out(2)",
+              scrollTrigger: {
+                trigger: item,
+                start: "top 65%",
+                once: true,
+              },
+            }
+          );
+        }
+
+        // number label
+        if (numLabel) {
+          gsap.fromTo(
+            numLabel,
+            { opacity: 0, y: 10 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: item,
+                start: "top 65%",
+                once: true,
+              },
+            }
+          );
+        }
+
+        // image slides in from the correct side
+        if (imgWrap) {
+          gsap.fromTo(
+            imgWrap,
+            { x: isEven ? -80 : 80, opacity: 0, scale: 0.96 },
+            {
+              x: 0,
+              opacity: 1,
+              scale: 1,
+              duration: 1.05,
+              ease: "expo.out",
+              scrollTrigger: {
+                trigger: item,
+                start: "top 68%",
+                once: true,
+              },
+            }
+          );
+        }
+
+        // info slides in opposite side, slightly delayed
+        if (infoWrap) {
+          gsap.fromTo(
+            infoWrap,
+            { x: isEven ? 60 : -60, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 1,
+              ease: "expo.out",
+              delay: 0.18,
+              scrollTrigger: {
+                trigger: item,
+                start: "top 68%",
+                once: true,
+              },
+            }
+          );
+        }
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
     <div
       ref={sectionRef}
       id="project"
-      className="flex flex-col w-screen transition-all duration-700 ease-out bg-white dark:bg-black text-black dark:text-white relative z-10 overflow-x-hidden"
+      className="flex flex-col w-screen bg-[#acd3ff] text-black relative z-10 overflow-x-hidden"
     >
 
-      <div className="absolute top-50 -right-60 h-[50%] w-[25%] rotate-45 rounded-4xl bg-black/3 dark:bg-white/3"></div>
-      <div className="absolute top-40 -left-80 h-[50%] w-[40%] rotate-55 rounded-4xl bg-black/4 dark:bg-white/3"></div>
-      {/* <div className="absolute top-80 -left-80 h-[30%] w-[40%] rotate-70 rounded-4xl bg-black/4 dark:bg-white/2"></div> */}
-
-      {/* ── HERO — DO NOT TOUCH ──────────────────────────────────────────────── */}
-      <div className="relative flex flex-col items-center w-full overflow-hidden p-10">
-        <div className="relative z-10 px-4 py-10 text-center dark:text-white/80 text-black/80">
-          <h1 className="font-light uppercase text-center z-10 text-[clamp(5rem,8vw,13rem)] w-full">
-            1. Video Editing
-          </h1>
-          <h2 className="absolute top-10 font-light text-[8px] max-w-xs text-left dark:text-[#ffffff42] text-[#00000042]">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero nam
-            consequuntur eaque officia velit incidunt esse molestiae deleniti
-          </h2>
-          <h2 className="absolute bottom-5 right-5 font-light text-[8px] max-w-xs text-left dark:text-[#ffffff42] text-[#00000042]">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero nam
-            consequuntur eaque officia velit incidunt esse molestiae deleniti
-            similique, eum asperiores autem? Dolorum, porro expedita tenetur vel
-            quam pariatur voluptate?
-          </h2>
+      {/* ── Hero Heading ─────────────────────────────────────────────── */}
+      <div
+        ref={headingRef}
+        className="relative z-10 flex flex-col items-center w-full px-4 pt-16 pb-10 sm:pt-24 sm:pb-14 text-center"
+      >
+        <div className="fade-up inline-flex items-center gap-2 bg-blue-500/15 border border-blue-500/30 text-blue-900 text-[11px] uppercase tracking-[.15em] px-4 py-1.5 rounded-full mb-7">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+          Service 01 — Video Editing
         </div>
+
+        {/* Line-reveal heading — each word wrapped in clip container */}
+        <div className="overflow-hidden mb-1">
+          <span className="title-line block font-light uppercase text-[clamp(2.8rem,7vw,11rem)] leading-[.92] tracking-tighter text-black/80">
+            Video
+          </span>
+        </div>
+        <div className="overflow-hidden mb-1">
+          <span className="title-line block font-light uppercase text-[clamp(2.8rem,7vw,11rem)] leading-[.92] tracking-tighter text-black/80">
+            <em className="not-italic text-blue-600">Editing</em> &amp;
+          </span>
+        </div>
+        <div className="overflow-hidden">
+          <span className="title-line block font-light uppercase text-[clamp(2.8rem,7vw,11rem)] leading-[.92] tracking-tighter text-black/80">
+            Production
+          </span>
+        </div>
+
+        <p className="fade-up mt-6 text-[11px] sm:text-sm text-black/40 max-w-sm mx-auto leading-relaxed">
+          Frame-perfect cuts, cinematic colour, motion graphics that keep eyes glued to the screen.
+        </p>
       </div>
 
-      {/* ── MAIN CONTENT CONTAINER (80vw) ─────────────────────────────────── */}
-      <div className="flex flex-col w-[80vw] mx-auto gap-0">
-        {/* ── TICKER ──────────────────────────────────────────────────────────── */}
-        {/* <div className="w-full overflow-hidden border-t border-b border-black/10 dark:border-white/10 py-3 mb-10">
+      <div className="absolute md:-left-30 -left-10 top-10 md:h-[90%] h-[95%] md:w-50 w-25 rounded-full bg-white bg-backdrop blur-3xl  pointer-events-none"></div>
+
+      <div className="absolute md:-right-30 -right-10 top-10 md:h-[90%] h-[95%] md:w-50 w-25 rounded-full bg-white bg-backdrop blur-3xl  pointer-events-none"></div>
+
+
+      {/* ── Timeline Section ─────────────────────────────────────────── */}
+      <div ref={lineRef} className="relative w-full max-w-6xl mx-auto px-4 sm:px-8 md:pb-32 pb-0">
+
+        {/* Vertical centre line */}
+        <div className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-px bg-black/10 hidden md:block">
           <div
-            ref={tickerInnerRef}
-            className="flex whitespace-nowrap will-change-transform"
-          >
-            {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-              <span
-                key={i}
-                className="mx-8 text-[11px] uppercase tracking-[0.3em] dark:text-white/30 text-black/30 font-light"
-              >
-                {item}
-                <span className="mx-8 dark:text-white/15 text-black/15">·</span>
-              </span>
-            ))}
-          </div>
-        </div> */}
+            ref={lineInnerRef}
+            className="w-full h-full bg-blue-500/60 origin-top"
+            style={{ transform: "scaleY(0)" }}
+          />
+        </div>
 
-        {/* ── STATS BAR ───────────────────────────────────────────────────────── */}
-        {/* <div
-          ref={statsRef}
-          className="w-full grid grid-cols-2 sm:grid-cols-4 border-t border-b border-black/10 dark:border-white/10 mb-12"
-        >
-          {STATS.map((s, i) => (
+        {/* Projects */}
+        {VIDEO_PROJECTS.map((p, i) => {
+          const isEven = i % 2 === 0;
+          return (
             <div
-              key={i}
-              className={`flex flex-col items-center py-6 px-4 ${
-                i < STATS.length - 1
-                  ? "border-r border-black/10 dark:border-white/10"
-                  : ""
-              }`}
+              key={p.num}
+              ref={(el) => { if (el) itemRefs.current[i] = el; }}
+              className="relative grid grid-cols-1 md:grid-cols-[1fr_56px_1fr] items-center gap-0 mb-20 sm:mb-28"
             >
-              <span
-                className="stat-num text-4xl sm:text-5xl font-extralight tabular-nums dark:text-white text-black"
-                data-target={s.value}
+
+              {/* ── Image column (left on even, right on odd) ────────── */}
+              <div className={`${isEven ? "md:col-start-1" : "md:col-start-3"} row-start-1`}>
+                <div
+                  className="proj-img relative rounded-2xl overflow-hidden"
+                  style={{
+                    boxShadow: isEven
+                      ? "16px 20px 60px -8px rgba(59,130,246,0.35), 4px 4px 24px rgba(255,255,255,0.5)"
+                      : "-16px 20px 60px -8px rgba(59,130,246,0.35), -4px 4px 24px rgba(255,255,255,0.5)",
+                  }}
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                    <img
+                      src={p.thumb}
+                      alt={p.title}
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      loading="lazy"
+                    />
+                    {/* scanline overlay */}
+                    <div
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px)",
+                      }}
+                    />
+                    {/* gradient vignette */}
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 55%)",
+                      }}
+                    />
+                    {/* play btn */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-14 h-14 rounded-full border border-white/50 bg-white/15 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all duration-300 cursor-pointer">
+                        <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 ml-0.5" opacity={0.9}>
+                          <polygon points="5,3 19,12 5,21" />
+                        </svg>
+                      </div>
+                    </div>
+                    {/* meta badges */}
+                    <span className="absolute bottom-3 left-3 text-[10px] uppercase tracking-widest px-2 py-1 bg-black/50 backdrop-blur-sm text-white/80 border border-white/15 rounded">
+                      {p.duration}
+                    </span>
+                    <span className="absolute top-3 right-3 text-[9px] uppercase tracking-widest px-2 py-1 bg-blue-500/70 backdrop-blur-sm text-white border border-white/20 rounded">
+                      {p.category}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── Centre checkpoint ────────────────────────────────── */}
+              <div className="hidden md:flex flex-col items-center justify-center relative z-10 row-start-1 md:col-start-2">
+                <div
+                  className="proj-dot w-4 h-4 rounded-full bg-blue-500 border-4 border-[#acd3ff] shadow-[0_0_0_2px_rgba(59,130,246,0.5)]"
+                  style={{ transform: "scale(0)" }}
+                />
+                <div
+                  className="proj-num absolute -bottom-7 text-[10px] uppercase tracking-[.2em] text-black/35 font-medium"
+                  style={{ opacity: 0 }}
+                >
+                  {p.num}
+                </div>
+              </div>
+
+              {/* ── Info column (right on even, left on odd) ─────────── */}
+              <div
+                className={`${isEven ? "md:col-start-3" : "md:col-start-1"} row-start-2 md:row-start-1 mt-5 md:mt-0`}
               >
-                0
-              </span>
-              <span className="text-[10px] uppercase tracking-[0.25em] dark:text-white/40 text-black/40 mt-1">
-                {s.label}
-              </span>
+                <div
+                  className="proj-info flex flex-col justify-center px-0 md:px-6"
+                  style={{ ...(isEven ? {} : { textAlign: "right" }) }}
+                >
+                  {/* year */}
+                  <span className="text-[10px] uppercase tracking-[.3em] text-black/30 mb-3">
+                    {p.year}
+                  </span>
+
+                  {/* title */}
+                  <h3 className="font-light text-[clamp(1.8rem,3.5vw,3rem)] leading-[1] tracking-tighter text-black/85 mb-1">
+                    {p.title}
+                  </h3>
+
+                  {/* client */}
+                  <p className="text-[11px] uppercase tracking-[.25em] text-blue-600/70 mb-4">
+                    {p.client}
+                  </p>
+
+                  {/* description */}
+                  <p className="text-sm text-black/50 leading-relaxed max-w-[300px] mb-5"
+                    style={{ ...(isEven ? {} : { marginLeft: "auto" }) }}
+                  >
+                    {p.desc}
+                  </p>
+
+                  {/* tags */}
+                  <div
+                    className={`flex flex-wrap gap-2 mb-6 ${isEven ? "" : "justify-end"}`}
+                  >
+                    {p.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="text-[9px] uppercase tracking-[.2em] px-2.5 py-1 border border-blue-500/30 text-blue-700 bg-blue-500/8 rounded-sm"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* CTA */}
+                  <div className={isEven ? "" : "flex justify-end"}>
+                    <button className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[.25em] group text-black">
+                      <span className="border-b border-black/25 group-hover:border-blue-500 group-hover:text-blue-600 transition-colors duration-200">
+                        View Project
+                      </span>
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.5}
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
-        </div> */}
+          );
+        })}
 
-        {/* ── VIDEO CAROUSEL ──────────────────────────────────────────────────── */}
-        <VideoCarousel />
-
-        {/* ── BOTTOM CTA ──────────────────────────────────────────────────────── */}
-        <div className="flex flex-col sm:flex-row items-center justify-between px-4 sm:px-12 py-10 gap-6 sm:gap-0 border-t border-black/10 dark:border-white/10">
-          <p className="text-[11px] uppercase tracking-[0.3em] dark:text-white/30 text-black/30">
-            All Projects →
-          </p>
-          <button className="group flex items-center gap-3 px-6 py-3 border border-black/20 dark:border-white/20 hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-all duration-300 text-sm uppercase tracking-widest">
-            View Full Reel
-            <svg
-              viewBox="0 0 24 24"
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.5}
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
+        {/* End cap */}
+        <div className="hidden md:flex flex-col items-center relative z-10">
+          <div className="w-3 h-3 rounded-full bg-blue-400/60 border-4 border-[#acd3ff]" />
+          <p className="mt-4 text-[10px] uppercase tracking-[.3em] text-black/25">End of reel</p>
         </div>
       </div>
     </div>
