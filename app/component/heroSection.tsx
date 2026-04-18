@@ -64,8 +64,8 @@ export default function HeroSection() {
       className="font-extralight relative pointer-events-none text-white flex flex-col gap-5 justify-center items-center h-screen w-screen bg-blue-500 p-10 pb-0 overflow-hidden"
     >
       {/* Description block — repositioned for mobile */}
-      <div className="z-20 absolute md:top-20 md:bottom-auto md:left-11 md:right-auto bottom-4 right-4 md:max-w-xs max-w-[160px] uppercase tracking-wider text-white/80 md:text-xs text-[8px]">
-        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt at ad cupiditate</span>
+      <div className="z-20 absolute md:top-20 md:bottom-auto md:left-11 md:right-auto bottom-25 right-4 md:max-w-xs max-w-[160px] uppercase tracking-wider text-white/80 md:text-xs text-[8px]">
+        <span className="md:text-left text-right">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt at ad cupiditate</span>
         <div className="grid grid-cols-5 max-w-35 mt-2">
           <div className="h-10 w-10 bg-white/20 rounded-full"></div>
           <div className="h-10 w-10 bg-white/20 rounded-full"></div>
@@ -82,11 +82,11 @@ export default function HeroSection() {
       </div>
 
       {/* Blur orb — scaled for mobile */}
-      <div className="absolute md:-top-[130px] top-20 md:h-[100vw] h-[60vh] w-[60vh] md:w-screen rounded-full bg-white bg-backdrop blur-3xl inset-0 pointer-events-none"></div>
+      <div className="absolute md:-top-[130px] top-35 md:h-[100vw] h-[60vh] w-[60vh] md:w-screen rounded-full bg-white bg-backdrop blur-3xl inset-0 pointer-events-none"></div>
 
       {/* Hero image — always pinned to bottom, full height on all breakpoints */}
       <div className="absolute
-        md:h-screen h-[75vh]
+        md:h-screen h-[68vh]
         md:left-1/2 left-1/2
         md:-translate-x-1/2 -translate-x-1/2
         bottom-0
@@ -106,7 +106,7 @@ export default function HeroSection() {
           md:text-[10.5vw] text-[13vw]
           text-black/80
           bg-clip-text mix-blend-difference
-          text-left md:leading-none leading-tight
+          text-left md:leading-none leading-12
           overflow-hidden uppercase
         ">
           <span className="block overflow-hidden">
@@ -114,11 +114,18 @@ export default function HeroSection() {
               Social <span className="text-blue-600">Media</span>
             </span>
           </span>
-          <span className="block overflow-hidden">
-            <span className="block line">
-              Content <span className="text-blue-600">Agency</span>
+          <div className="md:flex md:gap-5">
+            <span className="block overflow-hidden">
+              <span className="block line">
+                Content
+              </span>
             </span>
-          </span>
+            <span className="block overflow-hidden">
+              <span className="block line">
+                <span className="text-blue-600">Agency</span>
+              </span>
+            </span>
+          </div>
         </h1>
       </div>
     </div>

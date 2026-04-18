@@ -113,7 +113,7 @@ export default function Hero2() {
 
             <h2
                 ref={textRef}
-                className="relative md:text-4xl text-xl font-thin text-white text-center max-w-5xl tracking-wide md:leading-12 md:mt-0 mt-10"
+                className="relative md:text-4xl text-lg font-light text-white text-center max-w-5xl tracking-wide md:leading-12 md:mt-0 mt-10"
             >
                 {/* Quote icons — desktop only */}
                 <QuoteIconBold className="hidden md:block w-50 h-50 p-15 text-white/30 absolute -top-20 -left-35 rounded-full border border-dashed border-white/20" />
@@ -129,7 +129,7 @@ export default function Hero2() {
                 </span>
 
                 {/* MOBILE / TABLET: paragraph */}
-                <span className="md:hidden para-mobile block font-light text-center leading-relaxed text-xl px-2">
+                <span className="md:hidden para-mobile block font-light text-center leading-relaxed text-lg px-2">
                     {lines.map((line, i) => (
                         <span key={i}>
                             {highlightText(line)}
@@ -142,14 +142,14 @@ export default function Hero2() {
             {/* BG text — full width, scroll reveal */}
             <div
                 ref={bgTextRef}
-                className="absolute text-white font-bold bottom-0 left-0 w-full overflow-hidden pointer-events-none select-none"
-                style={{
-                    fontSize: "clamp(3rem, 40vw, 40vw)",
-                    lineHeight: 0.85,
-                    opacity: 0.08,
-                    whiteSpace: "nowrap",
-                    letterSpacing: "-0.02em",
-                }}
+                className="absolute text-white opacity-10 md:text-[70vh] text-[50vh] font-bold md:-bottom-[33vh] -bottom-[20vh] left-0 w-full overflow-hidden pointer-events-none select-none"
+            // style={{
+            //     fontSize: "clamp(3rem, 80vw, 60vw)",
+            //     lineHeight: 0.85,
+            //     opacity: 0.08,
+            //     whiteSpace: "nowrap",
+            //     letterSpacing: "-0.02em",
+            // }}
             >
                 uplicity
             </div>
