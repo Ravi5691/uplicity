@@ -65,9 +65,9 @@ function Card({
           scale,
           // ✅ no top offset here — origin-top handles the stack anchor
         }}
-        className="relative flex flex-col w-[90%] max-w-[1250px] md:h-[680px] h-[340px] rounded-4xl origin-top overflow-hidden shadow-2xl"
+        className="relative flex flex-col w-[90%] max-w-[1250px] md:h-[680px] h-[70vh] md:rounded-4xl  rounded-2xl origin-top overflow-hidden shadow-2xl"
       >
-        <h2 className="text-center text-2xl font-semibold">{title}</h2>
+        <h2 className=" absolute md:top-10 top-5 uppercase w-full z-10 -translate-x-1/2 left-1/2 text-center md:text-2xl text-lg font-semibold">{title}</h2>
         {/* <div className="flex h-full mt-10 gap-10"> */}
         {/* <div className="w-[40%] relative top-[10%]">
             <p className="text-sm leading-relaxed">{description}</p>
@@ -84,7 +84,7 @@ function Card({
             </span>
           </div> */}
         {/* </div> */}
-        <div className="absolute w-full h-full overflow-hidden">
+        <div className=" w-full h-[80vh] overflow-hidden">
           <motion.div style={{ scale: imageScale }} className="w-full h-full">
             <Image
               fill
@@ -93,6 +93,20 @@ function Card({
               className="object-cover"
             />
           </motion.div>
+        </div>
+        {/* Mobile Content (below image) */}
+        <div className="md:hidden absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-md text-white p-4">
+          <h2 className="text-lg font-semibold">{title}</h2>
+          <p className="text-xs mt-1 leading-relaxed line-clamp-3">
+            {description}
+          </p>
+          <a
+            href={url}
+            target="_blank"
+            className="text-[11px] underline mt-2 inline-block"
+          >
+            See more
+          </a>
         </div>
       </motion.div>
     </div>
