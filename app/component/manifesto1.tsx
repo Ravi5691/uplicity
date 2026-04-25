@@ -142,7 +142,7 @@ export default function Hero2() {
             {/* BG text — full width, scroll reveal */}
             <div
                 ref={bgTextRef}
-                className="absolute text-white opacity-10 md:text-[70vh] text-[50vh] font-bold md:-bottom-[33vh] -bottom-[20vh] left-0 w-full overflow-hidden pointer-events-none select-none"
+                className="absolute text-white opacity-10 md:text-[70vh] text-[30vh] font-bold md:-bottom-[25vh] -bottom-[10vh] left-0 w-full overflow-hidden pointer-events-none select-none"
             // style={{
             //     fontSize: "clamp(3rem, 80vw, 60vw)",
             //     lineHeight: 0.85,

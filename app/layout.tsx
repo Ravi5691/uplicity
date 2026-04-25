@@ -26,7 +26,7 @@ export default function RootLayout({
         <Providers>
           <ScrollProgressBar />
           <SmoothScroll />
-          <header className="fixed md:min-w-7xl z-50 md:left-1/2 md:-translate-x-1/2 "><NewNavbar /></header>
+          <header><NewNavbar /></header>
           <main>{children}</main>
           <footer><Footer /></footer>
         </Providers>

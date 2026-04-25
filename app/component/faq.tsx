@@ -35,7 +35,7 @@ export default function FAQSection() {
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="bg-[#acd3ff] text-black min-h-screen w-screen px-4 md:px-8 py-12 md:py-20 relative overflow-hidden">
+    <section className="bg-[#acd3ff] text-black h-full w-screen px-4 md:px-8 py-12 md:py-20 relative overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[350px_1fr] gap-8 md:gap-10 lg:gap-12">
 
