@@ -64,14 +64,24 @@ export default function HeroSection() {
       className="font-extralight relative pointer-events-none text-white flex flex-col gap-5 justify-center items-center h-screen w-screen bg-blue-500 p-10 pb-0 overflow-hidden"
     >
       {/* Description block — repositioned for mobile */}
-      <div className="z-20 absolute md:top-20 md:bottom-auto md:left-11 md:right-auto bottom-25 right-4 md:max-w-xs max-w-[160px] uppercase tracking-wider text-white/80 md:text-xs text-[8px]">
-        <span className="md:text-left text-right">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur nesciunt at ad cupiditate</span>
+      <div className="z-20 absolute md:top-20 md:bottom-auto md:left-11 md:right-auto bottom-25 right-4 md:max-w-[250px] max-w-[160px] uppercase tracking-wider text-white/80 md:text-xs text-[8px]">
+        <span className="md:text-left text-right">We design, build, and launch products that people actually love to use.</span>
         <div className="grid grid-cols-5 max-w-35 mt-2">
-          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
-          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
-          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
-          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
-          <div className="h-10 w-10 bg-white/20 rounded-full"></div>
+          <div className="h-10 w-10 bg-white/20 rounded-full overflow-hidden">
+            <img src="/avatars/1.png" alt="avatar" className="w-full h-full object-cover" />
+          </div>
+          <div className="h-10 w-10 bg-white/20 rounded-full overflow-hidden">
+            <img src="/avatars/2.png" alt="avatar" className="w-full h-full object-cover" />
+          </div>
+          <div className="h-10 w-10 bg-white/20 rounded-full  overflow-hidden">
+            <img src="/avatars/3.png" alt="avatar" className="w-full h-full object-cover" />
+          </div>
+          <div className="h-10 w-10 bg-white/20 rounded-full overflow-hidden">
+            <img src="/avatars/4.png" alt="avatar" className="w-full h-full object-cover" />
+          </div>
+          <div className="h-10 w-10 bg-white/20 rounded-full overflow-hidden">
+            <img src="/avatars/5.png" alt="avatar" className="w-full h-full object-cover" />
+          </div>
         </div>
       </div>
 
@@ -82,7 +92,7 @@ export default function HeroSection() {
       </div>
 
       {/* Blur orb — scaled for mobile */}
-      <div className="absolute md:-top-[130px] top-35 md:h-[100vw] h-[60vh] w-[60vh] md:w-screen rounded-full bg-white bg-backdrop blur-3xl inset-0 pointer-events-none"></div>
+      <div className="absolute md:-top-[130px] top-35 md:h-[100vw] h-[80vh] w-[60vh] md:w-screen rounded-full bg-white bg-backdrop blur-3xl inset-0 pointer-events-none left-1/2 -translate-x-1/2"></div>
 
       {/* Hero image — always pinned to bottom, full height on all breakpoints */}
       <div className="absolute
@@ -94,14 +104,14 @@ export default function HeroSection() {
         flex items-end justify-center z-10
       ">
         <img
-          src="image2.png"
+          src="hero.png"
           alt=""
-          className="object-contain object-bottom h-full w-auto -scale-x-100 max-w-none"
+          className="object-contain object-bottom h-full w-auto max-w-none"
         />
       </div>
 
       {/* Headline text — left-aligned, responsive sizing */}
-      <div className="md:w-full w-screen h-full flex md:items-end items-start z-20 relative md:px-0 px-4 md:mt-0 mt-5">
+      <div className="md:w-full w-screen h-full flex md:items-end items-start z-20 relative md:px-0 px-4 md:mt-0 mt-[5vh]">
         <h1 className="
           md:text-[10.5vw] text-[13vw]
           text-black/80

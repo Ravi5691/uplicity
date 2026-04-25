@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -15,6 +15,7 @@ const VIDEO_PROJECTS = [
     duration: "2:30",
     year: "2024",
     thumb: "/videoService/1.png",
+    video: "/videoService/1.mp4",
     tags: ["Color Grading", "Motion Graphics"],
     desc: "A cinematic deep-dive into the brand's ethos — raw energy, fearless movement, and the relentless pursuit of greatness.",
   },
@@ -26,6 +27,7 @@ const VIDEO_PROJECTS = [
     duration: "1:45",
     year: "2024",
     thumb: "/videoService/4.png",
+    video: "/videoService/4.mp4",
     tags: ["VFX", "3D Integration"],
     desc: "Precision meets poetry. A product reveal that strips everything back to reveal the beauty in the detail.",
   },
@@ -37,6 +39,7 @@ const VIDEO_PROJECTS = [
     duration: "12:00",
     year: "2023",
     thumb: "/videoService/2.png",
+    video: "/videoService/2.mp4",
     tags: ["Colour", "Sound Design"],
     desc: "A slow-burn narrative between memory and imagination — every frame hand-graded to breathe with the story.",
   },
@@ -48,34 +51,36 @@ const VIDEO_PROJECTS = [
     duration: "5:20",
     year: "2024",
     thumb: "/videoService/3.png",
+    video: "/videoService/3.mp4",
     tags: ["Multi-cam", "Graphics"],
     desc: "Capturing the electricity of ideas in a room — multi-camera precision edited into a seamless, kinetic recap.",
   },
-  {
-    num: "05",
-    title: "Music Video",
-    client: "Warner Music",
-    category: "Entertainment",
-    duration: "3:15",
-    year: "2023",
-    thumb: "/videoService/4.png",
-    tags: ["VFX", "Color"],
-    desc: "Visual storytelling that moves with the beat — chromatic explosions, frame-perfect cuts, and a world built from light.",
-  },
-  {
-    num: "06",
-    title: "Social Reels",
-    client: "Meta",
-    category: "Social Media",
-    duration: "0:30",
-    year: "2024",
-    thumb: "/videoService/1.png",
-    tags: ["Fast Cut", "Motion"],
-    desc: "Six seconds to stop the scroll. Each reel engineered for impact — hooks, rhythm, and a single unforgettable moment.",
-  },
+  // {
+  //   num: "05",
+  //   title: "Music Video",
+  //   client: "Warner Music",
+  //   category: "Entertainment",
+  //   duration: "3:15",
+  //   year: "2023",
+  //   thumb: "/videoService/4.png",
+  //   tags: ["VFX", "Color"],
+  //   desc: "Visual storytelling that moves with the beat — chromatic explosions, frame-perfect cuts, and a world built from light.",
+  // },
+  // {
+  //   num: "06",
+  //   title: "Social Reels",
+  //   client: "Meta",
+  //   category: "Social Media",
+  //   duration: "0:30",
+  //   year: "2024",
+  //   thumb: "/videoService/1.png",
+  //   tags: ["Fast Cut", "Motion"],
+  //   desc: "Six seconds to stop the scroll. Each reel engineered for impact — hooks, rhythm, and a single unforgettable moment.",
+  // },
 ];
 
 export default function Service1() {
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
@@ -314,43 +319,58 @@ export default function Service1() {
                   }}
                 >
                   <div className="relative aspect-[4/3] w-full overflow-hidden">
-                    <img
-                      src={p.thumb}
-                      alt={p.title}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                      loading="lazy"
-                    />
-                    {/* scanline overlay */}
-                    <div
-                      className="absolute inset-0 pointer-events-none"
-                      style={{
-                        backgroundImage:
-                          "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px)",
-                      }}
-                    />
-                    {/* gradient vignette */}
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background:
-                          "linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 55%)",
-                      }}
-                    />
-                    {/* play btn */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-14 h-14 rounded-full border border-white/50 bg-white/15 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-all duration-300 cursor-pointer">
-                        <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 ml-0.5" opacity={0.9}>
-                          <polygon points="5,3 19,12 5,21" />
-                        </svg>
-                      </div>
-                    </div>
-                    {/* meta badges */}
-                    <span className="absolute bottom-3 left-3 text-[10px] uppercase tracking-widest px-2 py-1 bg-black/50 backdrop-blur-sm text-white/80 border border-white/15 rounded">
-                      {p.duration}
-                    </span>
-                    <span className="absolute top-3 right-3 text-[9px] uppercase tracking-widest px-2 py-1 bg-blue-500/70 backdrop-blur-sm text-white border border-white/20 rounded">
-                      {p.category}
-                    </span>
+                    {activeVideo === p.num ? (
+                      <video
+                        src={p.video}
+                        autoPlay
+                        controls
+                        className="w-full h-full object-cover relative z-20"
+                        onEnded={() => setActiveVideo(null)}
+                      />
+                    ) : (
+                      <>
+                        <img
+                          src={p.thumb}
+                          alt={p.title}
+                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                          loading="lazy"
+                        />
+                        {/* scanline overlay */}
+                        <div
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            backgroundImage:
+                              "repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px)",
+                          }}
+                        />
+                        {/* gradient vignette */}
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background:
+                              "linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 55%)",
+                          }}
+                        />
+                        {/* play btn */}
+                        <div
+                          className="absolute inset-0 flex items-center justify-center cursor-pointer group"
+                          onClick={() => setActiveVideo(p.num)}
+                        >
+                          <div className="w-14 h-14 rounded-full border border-white/50 bg-white/15 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-all duration-300">
+                            <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 ml-0.5" opacity={0.9}>
+                              <polygon points="5,3 19,12 5,21" />
+                            </svg>
+                          </div>
+                        </div>
+                        {/* meta badges */}
+                        <span className="absolute bottom-3 left-3 text-[10px] uppercase tracking-widest px-2 py-1 bg-black/50 backdrop-blur-sm text-white/80 border border-white/15 rounded">
+                          {p.duration}
+                        </span>
+                        <span className="absolute top-3 right-3 text-[9px] uppercase tracking-widest px-2 py-1 bg-blue-500/70 backdrop-blur-sm text-white border border-white/20 rounded">
+                          {p.category}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

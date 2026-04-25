@@ -6,28 +6,34 @@ import Image from "next/image";
 
 const projects = [
   {
-    title: "Matthias Leidinger",
+    title: "ModePro",
     description:
-      "Originally hailing from Austria, Berlin-based photographer Matthias Leindinger is a young creative brimming with talent and ideas.",
+      "A fashion-forward digital experience with editorial layouts and immersive product storytelling — built for a modern clothing brand.",
     src: "/webService/1.webp",
     url: "https://modepro.vercel.app/",
-    color: "#ffffff40",
+    color: "#1a1a2e",
+    tag: "Fashion · E-commerce",
+    year: "2024",
   },
   {
-    title: "Clément Chapillon",
+    title: "Krivisio",
     description:
-      "This is a story on the border between reality and imaginary, about the contradictory feelings that the insularity of a rocky territory provokes.",
+      "A bold creative studio portfolio with fluid transitions, custom cursor interactions, and a dark cinematic aesthetic.",
     src: "/webService/2.webp",
     url: "https://www.krivisio.com/",
-    color: "#ffffff40",
+    color: "#0f1b12",
+    tag: "Portfolio · Studio",
+    year: "2024",
   },
   {
-    title: "Zissou",
+    title: "Ravinder Portfolio",
     description:
-      "Though he views photography as a medium for storytelling, Zissou's images don't insist on a narrative.",
+      "A personal brand portfolio designed to convert — clean motion, strategic layout, and a sharp first impression that lasts.",
     src: "/webService/3.webp",
     url: "https://ravinder-portfolio.vercel.app/",
-    color: "#ffffff40",
+    color: "#1c1410",
+    tag: "Personal · Brand",
+    year: "2023",
   },
 ];
 
@@ -38,6 +44,8 @@ function Card({
   src,
   url,
   color,
+  tag,
+  year,
   progress,
   range,
   targetScale,
@@ -49,66 +57,95 @@ function Card({
     offset: ["start end", "start start"],
   });
 
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1.12, 1]);
   const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
-    // ✅ sticky top is on the outer container, offset by card index
     <div
       ref={container}
       className="h-screen flex items-center justify-center sticky"
-      style={{ top: `${i * 25}px` }}   // ← moved here, progressive offset
+      style={{ top: `${i * 25}px` }}
     >
-      <motion.div
-        style={{
-          backgroundColor: color,
-          scale,
-          // ✅ no top offset here — origin-top handles the stack anchor
-        }}
-        className="relative flex flex-col w-[90%] max-w-[1250px] md:h-[680px] h-[70vh] md:rounded-4xl  rounded-2xl origin-top overflow-hidden shadow-2xl"
+      {/* Entire card is a link */}
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-[90%] max-w-[1250px]"
+        style={{ textDecoration: "none" }}
       >
-        <h2 className=" absolute md:top-10 top-5 uppercase w-full z-10 -translate-x-1/2 left-1/2 text-center md:text-2xl text-lg font-semibold">{title}</h2>
-        {/* <div className="flex h-full mt-10 gap-10"> */}
-        {/* <div className="w-[40%] relative top-[10%]">
-            <p className="text-sm leading-relaxed">{description}</p>
-            <span className="flex items-center gap-2 mt-3">
-              <a href={url} target="_blank" className="text-xs underline">
-                See more
-              </a>
-              <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
-                <path
-                  d="M21.53 6.53c.29-.29.29-.76 0-1.06L16.76.7a.75.75 0 0 0-1.06 1.06L19.94 6l-4.24 4.24a.75.75 0 1 0 1.06 1.06l4.77-4.77ZM0 6.75h21v-1.5H0v1.5Z"
-                  fill="black"
-                />
-              </svg>
-            </span>
-          </div> */}
-        {/* </div> */}
-        <div className=" w-full h-[80vh] overflow-hidden">
-          <motion.div style={{ scale: imageScale }} className="w-full h-full">
-            <Image
-              fill
-              src={`${src}`}
-              alt="image"
-              className="object-cover"
-            />
-          </motion.div>
-        </div>
-        {/* Mobile Content (below image) */}
-        <div className="md:hidden absolute bottom-0 left-0 w-full bg-black/40 backdrop-blur-md text-white p-4">
-          <h2 className="text-lg font-semibold">{title}</h2>
-          <p className="text-xs mt-1 leading-relaxed line-clamp-3">
-            {description}
-          </p>
-          <a
-            href={url}
-            target="_blank"
-            className="text-[11px] underline mt-2 inline-block"
-          >
-            See more
-          </a>
-        </div>
-      </motion.div>
+        <motion.div
+          style={{ backgroundColor: color, scale }}
+          className="relative flex flex-col w-full md:h-[680px] h-[60vh] md:rounded-4xl rounded-2xl origin-top overflow-hidden shadow-2xl group cursor-pointer"
+        >
+
+          {/* ── Desktop top bar ── */}
+          <div className="hidden md:flex items-center justify-between absolute top-7 left-8 right-8 z-20 mix-blend-difference">
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] tracking-[0.2em] uppercase text-white/40">0{i + 1}</span>
+              <span className="w-px h-3 bg-white/20" />
+              <span className="text-[10px] tracking-[0.15em] uppercase text-white/40">{tag}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[10px] text-white/30 font-mono">{year}</span>
+              {/* Arrow circle — brightens on hover */}
+              <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center opacity-60 group-hover:opacity-100 group-hover:border-white/60 group-hover:scale-110 transition-all duration-300">
+                <span className="text-white text-xs">↗</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Desktop title (bottom left) ── */}
+          <div className="hidden md:block absolute bottom-7 left-8 z-20">
+            <h2 className="text-3xl tracking-tight text-white group-hover:translate-x-1 transition-transform duration-300">
+              {title}
+            </h2>
+            <p className="text-xs text-white mt-1 max-w-sm leading-relaxed">{description}</p>
+          </div>
+
+          {/* ── Desktop "View Project" label bottom right ── */}
+          <div className="hidden md:flex absolute bottom-7 bg-black rounded-full p-3 border border-white right-8 z-20 items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="text-[10px] tracking-[0.2em] uppercase text-white">View Project</span>
+          </div>
+
+          {/* ── Image ── */}
+          <div className="w-full h-full overflow-hidden">
+            <motion.div style={{ scale: imageScale }} className="w-full h-full">
+              <Image
+                fill
+                src={src}
+                alt={title}
+                className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
+              />
+            </motion.div>
+          </div>
+
+          {/* Gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none transition-opacity duration-500 md:opacity-0 md:group-hover:opacity-100" />
+
+          {/* ── Mobile bottom bar ── */}
+          <div className="md:hidden absolute bottom-0 left-0 w-full px-5 py-5 z-20">
+            <div className="flex items-end justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[9px] tracking-[0.2em] uppercase text-white/40">0{i + 1}</span>
+                  <span className="w-px h-2.5 bg-white/20" />
+                  <span className="text-[9px] tracking-[0.15em] uppercase text-white/40">{tag}</span>
+                </div>
+                <h2 className="text-2xl font-light tracking-tight text-white leading-tight">{title}</h2>
+                <p className="text-[11px] mt-1.5 leading-relaxed text-white line-clamp-2">
+                  {description}
+                </p>
+              </div>
+              {/* Tap arrow */}
+              <div className="shrink-0 w-10 h-10 rounded-full border border-white/25 flex items-center justify-center">
+                <span className="text-white text-sm">↗</span>
+              </div>
+            </div>
+          </div>
+
+        </motion.div>
+      </a>
     </div>
   );
 }
@@ -122,7 +159,9 @@ export default function Service3() {
   });
 
   return (
-    <section className="relative flex flex-col items-center w-screen bg-[#acd3ff] text-black">
+    <section id="project" className="relative flex flex-col items-center w-screen bg-[#acd3ff] text-black">
+
+      {/* Section header */}
       <div className="relative z-10 flex flex-col items-center pt-14 pb-8 px-4 text-center">
         <div className="inline-flex items-center gap-2 bg-blue-500/15 border border-blue-500/30 text-blue-900 text-[11px] uppercase tracking-[.15em] px-4 py-1.5 rounded-full mb-5">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
@@ -136,7 +175,6 @@ export default function Service3() {
         </p>
       </div>
 
-      {/* ✅ No mt/mb offset — scroll height is purely driven by card count */}
       <main
         ref={container}
         className="relative w-full"
@@ -144,7 +182,6 @@ export default function Service3() {
       >
         {projects.map((project, i) => {
           const targetScale = 1 - (projects.length - i) * 0.05;
-          // ✅ Evenly distributed ranges across [0, 1]
           const rangeStart = i / projects.length;
           const rangeEnd = (i + 1) / projects.length;
           return (

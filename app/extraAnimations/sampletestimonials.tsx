@@ -320,7 +320,7 @@ export default function SampleTestimonials() {
     const active = testimonials[index];
 
     return (
-        <div ref={sectionRef} className="min-h-screen w-screen flex flex-col items-center justify-center bg-noise py-16 sm:py-24 relative overflow-hidden px-4">
+        <div ref={sectionRef} className="h-full w-screen flex flex-col items-center justify-center bg-noise py-16 sm:py-24 relative overflow-hidden px-4">
             {/* inner shadow — top */}
             <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-20"
                 style={{ background: "linear-gradient(to bottom, #acd3ff 0%, transparent 100%)" }} />
