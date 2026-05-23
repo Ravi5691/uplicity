@@ -128,7 +128,7 @@ export default function NewNavbar() {
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-screen px-4 md:px-11 h-14 md:h-16 ">
         {/* Logo */}
         <div className={` text-xl md:text-2xl font-light flex items-start text-white gap-1`}>
-          <span ref={logoRef} className="uppercase tracking-widest">UPLICITY</span>
+          <span className="uppercase tracking-widest">UPLICITY</span>
           <sup className="text-[9px] mt-[10px] opacity-60">™</sup>
         </div>
 
