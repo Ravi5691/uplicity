@@ -154,7 +154,7 @@ export default function ServiceStack() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen w-screen md:py-0 py-20 flex items-center justify-center bg-noise text-black dark:text-white overflow-hidden"
+      className="relative min-h-screen w-screen md:py-0 py-20 flex items-center justify-center bg-noise text-white overflow-hidden"
     >
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-20"
         style={{ background: "linear-gradient(to top, #00000025 0%, transparent 60%)" }} />

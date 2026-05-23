@@ -8,8 +8,11 @@ const projects = [
   {
     title: "ModePro",
     description:
-      "A fashion-forward digital experience with editorial layouts and immersive product storytelling — built for a modern clothing brand.",
-    src: "/webService/1.webp",
+      "A fashion-forward digital experience with editorial layouts and immersive product storytelling.",
+
+    desktopSrc: "/webService/1.png",
+    mobileSrc: "/webService/mob1.png",
+
     url: "https://modepro.vercel.app/",
     color: "#1a1a2e",
     tag: "Fashion · E-commerce",
@@ -19,29 +22,31 @@ const projects = [
     title: "Krivisio",
     description:
       "A bold creative studio portfolio with fluid transitions, custom cursor interactions, and a dark cinematic aesthetic.",
-    src: "/webService/2.webp",
+    desktopSrc: "/webService/2.png",
+    mobileSrc: "/webService/mob2.png",
     url: "https://www.krivisio.com/",
     color: "#0f1b12",
     tag: "Portfolio · Studio",
     year: "2024",
   },
-  {
-    title: "Ravinder Portfolio",
-    description:
-      "A personal brand portfolio designed to convert — clean motion, strategic layout, and a sharp first impression that lasts.",
-    src: "/webService/3.webp",
-    url: "https://ravinder-portfolio.vercel.app/",
-    color: "#1c1410",
-    tag: "Personal · Brand",
-    year: "2023",
-  },
+  // {
+  //   title: "Ravinder Portfolio",
+  //   description:
+  //     "A personal brand portfolio designed to convert — clean motion, strategic layout, and a sharp first impression that lasts.",
+  //   src: "/webService/3.webp",
+  //   url: "https://ravinder-portfolio.vercel.app/",
+  //   color: "#1c1410",
+  //   tag: "Personal · Brand",
+  //   year: "2023",
+  // },
 ];
 
 function Card({
   i,
   title,
   description,
-  src,
+  desktopSrc,
+  mobileSrc,
   url,
   color,
   tag,
@@ -76,7 +81,7 @@ function Card({
       >
         <motion.div
           style={{ backgroundColor: color, scale }}
-          className="relative flex flex-col w-full md:h-[680px] h-[60vh] md:rounded-4xl rounded-2xl origin-top overflow-hidden shadow-2xl group cursor-pointer"
+          className="relative flex flex-col w-full md:h-[680px] h-[70vh] md:rounded-4xl rounded-2xl origin-top overflow-hidden shadow-2xl group cursor-pointer"
         >
 
           {/* ── Desktop top bar ── */}
@@ -109,14 +114,26 @@ function Card({
           </div>
 
           {/* ── Image ── */}
+          {/* ── Image ── */}
           <div className="w-full h-full overflow-hidden">
             <motion.div style={{ scale: imageScale }} className="w-full h-full">
+
+              {/* Desktop Image */}
               <Image
                 fill
-                src={src}
+                src={desktopSrc}
                 alt={title}
-                className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                className="hidden md:block object-cover object-top  group-hover:scale-[1.02] transition-transform duration-700"
               />
+
+              {/* Mobile Image */}
+              <Image
+                fill
+                src={mobileSrc}
+                alt={title}
+                className="block md:hidden object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
+              />
+
             </motion.div>
           </div>
 
